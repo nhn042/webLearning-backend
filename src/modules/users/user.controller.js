@@ -1,0 +1,1 @@
+// lấy data và tiền xử lý rồi gửi tới service

@@ -1,0 +1,18 @@
+{
+  "name": "projectStructure",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start" :"nodemon server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "eslintrc": "^1.0.6",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
