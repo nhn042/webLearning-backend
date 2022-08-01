@@ -1,18 +1,30 @@
 {
-  "name": "projectStructure",
+  "name": "album_management",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start" :"nodemon server.js"
+    "start": "nodemon app.js"
   },
   "dependencies": {
+    "body-parser": "^1.20.0",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.1",
     "eslintrc": "^1.0.6",
     "express": "^4.18.1",
-    "mongoose": "^6.5.0"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.0",
+    "nodemailer": "^6.7.7"
   },
   "devDependencies": {
-    "nodemon": "^2.0.19"
-  }
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-recommended": "^4.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1"
+  },
+  "repository": "https://github.com/minhhieu3101/albumManagement.git",
+  "author": "minhhieu3101 <dangminhhieu3101@gmail.com>"
 }

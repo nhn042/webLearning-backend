@@ -1,0 +1,28 @@
+
+# POST http://localhost:8080/register
+# Content-Type: application/json
+
+# {
+#     "username" : "dangminc",
+#     "password" : "minhhieuhi",
+#     "email" : "hieudm1@vmodev.com",
+#     "fullname" : "Dang Minh Hieu",
+#     "dob" : "2001-01-31"
+# }
+
+POST http://localhost:8080/forgot-password
+Content-Type: application/json
+
+{
+    "email" : "hieudm1@vmodev.com",
+    "activeCode": 5415,
+    "password": "minhheiu330"
+}
+
+# POST http://localhost:8080/activate
+# Content-Type: application/json
+
+# {
+#     "email" : "hieudm1@vmodev.com",
+#     "otp" : 2547
+# }
