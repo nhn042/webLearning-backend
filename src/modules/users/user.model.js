@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    _id: {
+    id: {
         type: Schema.Types.ObjectId,
     },
     username: {
@@ -46,9 +46,9 @@ const userSchema = new Schema({
         required: true,
     },
     activeCode: {
-        type: Number || String,
+        type: Number ,
         default: null,
-    },
+    }
 });
 
 module.exports = mongoose.model('user', userSchema);

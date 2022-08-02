@@ -1,29 +1,27 @@
 const authService = require('./auth.service');
-const crypto = require('crypto');
+const functitonUtils = require("../../utils/function.utils")
+const {Error} = require("../../commons/errorHandling")
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { account , password } = req.body;
     try {
-        const accessToken = await authService.checkLogin(username, password);
+        const accessToken = await authService.checkLogin(account, password);
         res.status(200).json(accessToken);
     } catch (err) {
-        res.status(400).json("login fail");
+        res.status(err.errorCode).json(err.errorMessage);
     }
 };
 
 const register = async (req, res) => {
-    const { username, password, email, fullname, dob } = req.body;
-    const hashPassword = crypto
-        .createHash('sha256')
-        .update(password)
-        .digest('base64');
+    const userRegister = req.body;
+    userRegister.password = functitonUtils.hashPassword(userRegister.password);
     if (
-        await authService.register(username, hashPassword, email, fullname, dob)
+        await authService.register(userRegister)
     ) {
         res.status(200).json({
             message: 'Used Saved',
-            username: username,
-            password: password,
+            username: userRegister.username,
+            password: userRegister.password,
         });
     } else {
         res.status(401).json({ message: 'Register Failed' });

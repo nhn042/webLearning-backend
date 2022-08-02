@@ -1,47 +1,50 @@
-const nodemailer = require('nodemailer');
-require('dotenv').config({ path: '../../configs/.env' });
 const userRepo = require('./user.repository');
-const authService = require("../auth/auth.service")
-const utils = require('../../utils/function.utils');
+const functionUtils = require('../../utils/function.utils');
+const { Error } = require('../../commons/errorHandling');
 
 const activateUser = async (email, otp) => {
     const user = await userRepo.findUserByEmail(email);
+    console.log(user);
     const otpCode = user.activeCode;
+    console.log(otpCode);
     if (otp === otpCode) {
         user.isActive = true;
         await user.save();
         console.log(user);
         return true;
     } else {
-        return false;
+        throw new Error('400', 'activate user fail');
     }
 };
 
 const resendToken = async (email) => {
     try {
         const user = await userRepo.findUserByEmail(email);
-        user.activeCode = await utils.sendOTPtoMail(email);
+        user.activeCode = await functionUtils.sendOTPtoMail(email);
         await user.save();
         return user.activeCode;
     } catch (err) {
-        throw err;
+        throw new Error('500', 'resend token fail');
     }
 };
 
-const createNewUser = async (username, password, email, fullname, dob) => {
-    if (!(await userRepo.checkUserExists(username, password, email))) {
-        const newUser = await userRepo.createNewUser(
-            username,
-            password,
-            email,
-            fullname,
-            dob
-        );
+const createNewUser = async (userRegister) => {
+    if (
+        !(await userRepo.checkUserExists(
+            userRegister.username,
+            userRegister.password,
+            userRegister.email
+        ))
+    ) {
+        const newUser = await userRepo.createNewUser(userRegister);
         if (newUser) {
             console.log('create success');
-            const user = await userRepo.findUserByEmail(email);
-            user.activeCode = await utils.sendOTPtoMail(email);
+            const user = await userRepo.findUserByEmail(userRegister.email);
+            user.activeCode = await functionUtils.sendOTPtoMail(
+                userRegister.email
+            );
             await user.save();
+            console.log(user);
             return true;
         } else {
             return false;
@@ -54,26 +57,43 @@ const createNewUser = async (username, password, email, fullname, dob) => {
 const forgotPassword = async (email, activeCode, password) => {
     const user = await userRepo.findUserByEmail(email);
     if (user.activeCode === activeCode) {
-        user.password = utils.hashPassword(password);
+        user.password = functionUtils.hashPassword(password);
         await user.save();
-        return "change forgot-password success";
+        return 'change forgot-password success';
     } else {
-        throw new Error('500', ' activeCode is wrong ');
+        throw new Error('400', ' activeCode is wrong ');
     }
 };
 
 const changePassword = async (email, password, newPassword) => {
-    if(await authService.checkLogin(email, password)){
-        
-    }
     const user = await userRepo.findUserByEmail(email);
-    if (user.activeCode === activeCode) {
-        user.password = utils.hashPassword(password);
-        await user.save();
-        return "change forgot-password success";
+    if (user.password === functionUtils.hashPassword(password)) {
+        user.password = functionUtils.hashPassword(newPassword);
+        return await user.save();
     } else {
-        throw new Error('500', ' activeCode is wrong ');
+        throw new Error('400', 'wrong password');
     }
 };
 
-module.exports = { activateUser, createNewUser, resendToken, forgotPassword , changePassword };
+const updateUserInfo = async (userUpdate) => {
+    const user = await userRepo.findUserByEmail(userUpdate.email);
+    if (user) {
+        user.dob = userUpdate.dob;
+        user.fullname = userUpdate.fullname;
+        console.log(user);
+        await user.save();
+        console.log(user);
+        return user;
+    } else {
+        throw new Error('400', 'update is not success');
+    }
+};
+
+module.exports = {
+    activateUser,
+    createNewUser,
+    resendToken,
+    forgotPassword,
+    changePassword,
+    updateUserInfo,
+};

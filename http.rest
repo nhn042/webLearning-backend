@@ -3,26 +3,35 @@
 # Content-Type: application/json
 
 # {
-#     "username" : "dangminc",
-#     "password" : "minhhieuhi",
-#     "email" : "hieudm1@vmodev.com",
+#     "username" : "diemquynh",
+#     "password" : "d4dfdf",
+#     "email" : "19021274@vnu.edu.vn",
 #     "fullname" : "Dang Minh Hieu",
-#     "dob" : "2001-01-31"
+#     "dob" : "2001-01"
 # }
 
-POST http://localhost:8080/forgot-password
-Content-Type: application/json
+# POST http://localhost:8080/login
+# Content-Type: application/json
 
-{
-    "email" : "hieudm1@vmodev.com",
-    "activeCode": 5415,
-    "password": "minhheiu330"
-}
+# {
+#     "account" : "19021274@vnu.edu.vn",
+#     "password" : "d4dfdf"
+# }
+
+# PATCH http://localhost:8080/update-userInfo
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyZThjMDBlMDA4YTc4OTA2NDY5MDk2ZiIsInVzZXJuYW1lIjoiZGllbXF1eW5oIiwicGFzc3dvcmQiOiJCa3k2dUtmbFdCQ2QyOG5KaUNDR01ja04rVnRURFlXdEtvOEYzb1R4M0ZZPSIsImVtYWlsIjoiMTkwMjEyNzRAdm51LmVkdS52biIsImZ1bGxuYW1lIjoiRGFuZyBNaW5oIEhpZXUiLCJkb2IiOiIyMDAxLTAxLTAxVDAwOjAwOjAwLjAwMFoiLCJpc0FjdGl2ZSI6dHJ1ZSwiYWN0aXZlQ29kZSI6NDkyMywiY3JlYXRlZEF0IjoiMjAyMi0wOC0wMlQwNjoxMToyNi45OTFaIiwidXBkYXRlZEF0IjoiMjAyMi0wOC0wMlQwNjoxMToyNi45OTJaIiwiX192IjowfSwiaWF0IjoxNjU5NDIwOTQ4LCJleHAiOjE2NTk1MDczNDh9.brJJDUqVVxarzispKQM1idW6MpI10Pemz8YwHrpDPI4
+# Content-Type: application/json
+
+# {
+#     "email" : "19021274@vnu.edu.vn",
+#     "dob": "2000-01-30",
+#     "fullname": "Dang Hieu"
+# }
 
 # POST http://localhost:8080/activate
 # Content-Type: application/json
 
 # {
-#     "email" : "hieudm1@vmodev.com",
-#     "otp" : 2547
+#     "email" : "19021274@vnu.edu.vn",
+#     "otp" : 4923
 # }

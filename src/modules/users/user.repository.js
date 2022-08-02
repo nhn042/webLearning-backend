@@ -11,26 +11,19 @@ const checkUserExists = async (username, password, email) => {
     } catch (err) {}
 };
 
-const loginByName = async (username, password) => {
+const login = async (username, password) => {
     try {
-        const user = await User.findOne({
-            username: username,
-            password: password,
-        });
+        const user =
+            (await User.findOne({
+                username: username,
+                password: password,
+            })) ||
+            (await User.findOne({
+                email: username,
+                password: password,
+            }));
         return user;
     } catch (err) {}
-};
-
-const loginByEmail = async (email, password) => {
-    try {
-        const user = await User.findOne({
-            email: email,
-            password: password,
-        });
-        return user;
-    } catch (err) {
-        throw err;
-    }
 };
 
 const findUserByEmail = async (email) => {
@@ -42,13 +35,13 @@ const findUserByEmail = async (email) => {
     }
 };
 
-const createNewUser = async (username, password, email, fullname, dob) => {
+const createNewUser = async (userRegister) => {
     const user = new User({
-        username: username,
-        password: password,
-        email: email,
-        fullname: fullname,
-        dob: dob,
+        username: userRegister.username,
+        password: userRegister.password,
+        email: userRegister.email,
+        fullname: userRegister.fullname,
+        dob: userRegister.dob,
     });
     try {
         return await user.save();
@@ -58,8 +51,7 @@ const createNewUser = async (username, password, email, fullname, dob) => {
 };
 
 module.exports = {
-    loginByEmail,
-    loginByName,
+    login,
     findUserByEmail,
     createNewUser,
     checkUserExists,

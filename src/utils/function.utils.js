@@ -15,24 +15,17 @@ const sendOTPtoMail = async (email) => {
         },
     };
     const transporter = nodemailer.createTransport(smtpConfig);
-    try {
-        await transporter.sendMail({
-            from: '"MinhHieu " <dangminhhieu3101@gmail.com>',
-            to: email,
-            subject: 'Verify Your Account',
-            html: `<p>Enter <b>${otp}</b> to verify your email address</p>`,
-        });
-        return otp;
-    } catch (err) {
-        throw err;
-    }
+    await transporter.sendMail({
+        from: '"MinhHieu " <dangminhhieu3101@gmail.com>',
+        to: email,
+        subject: 'Verify Your Account',
+        html: `<p>Enter <b>${otp}</b> to verify your email address</p>`,
+    });
+    return otp;
 };
 
 const hashPassword = (password) => {
-    return crypto
-        .createHash('sha256')
-        .update(password)
-        .digest('base64');
-}
+    return crypto.createHash('sha256').update(password).digest('base64');
+};
 
-module.exports = { sendOTPtoMail , hashPassword };
+module.exports = { sendOTPtoMail, hashPassword };

@@ -2,7 +2,7 @@
 const userService = require('./user.service');
 const { Error } = require('../../commons/errorHandling');
 
-const activateUser = async (req, res) => {
+const activateUser = async (req, res, next) => {
     const { email, otp } = req.body;
     try {
         if (await userService.activateUser(email, otp)) {
@@ -15,33 +15,59 @@ const activateUser = async (req, res) => {
             res.status(400).send('fail activate email');
         }
     } catch (err) {
-        throw err;
+        next(err);
     }
 };
 
-const resendToken = async (req, res) => {
+const resendToken = async (req, res, next) => {
     try {
         res.status(200).json(await userService.resendToken(req.body.email));
     } catch (err) {
-        res.status(400).json(err);
+        next(err);
     }
 };
-const forgotPassword = async (req, res) => {
-    const { email, activeCode , password } = req.body;
+const forgotPassword = async (req, res, next) => {
+    const { email, activeCode, password } = req.body;
     try {
-        res.status(200).json(await userService.forgotPassword(email, activeCode , password));
+        res.status(200).json(
+            await userService.forgotPassword(email, activeCode, password)
+        );
     } catch (err) {
-        res.status(400).json(err);
+        next(err);
     }
 };
 
-const changePassword = async (req,res) => {
-    const {email, password, newPassword } = req.body;
+const changePassword = async (req, res, next) => {
+    const { email, password, newPassword } = req.body;
+    console.log(req.body);
     try {
-        res.status(200).json(await userService.changePassword(email , password, newPassword));
+        if (await userService.changePassword(email, password, newPassword)) {
+            res.status(200).json('change pass success');
+        } else {
+            res.status(400).send('change pass fail');
+        }
     } catch (err) {
-        res.status(400).json(err);
+        next(err);
     }
-}
+};
 
-module.exports = { activateUser, resendToken, forgotPassword , changePassword };
+const updateUserInfo = async (req, res, next) => {
+    const userUpdate = req.body;
+    try {
+        if (await userService.updateUserInfo(userUpdate)) {
+            res.status(200).json('update success');
+        } else {
+            res.status(400).send('update fail');
+        }
+    } catch (err) {
+        next(err);
+    }
+};
+
+module.exports = {
+    activateUser,
+    resendToken,
+    forgotPassword,
+    changePassword,
+    updateUserInfo,
+};

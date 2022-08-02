@@ -1,39 +1,36 @@
-const userDB = require('../users/user.repository');
+const userRepo = require('../users/user.repository');
 const jwt = require('jsonwebtoken');
 const userService = require('../users/user.service');
-const utils = require("../../utils/function.utils")
+const utils = require('../../utils/function.utils');
+const { Error } = require('../../commons/errorHandling');
 
-const checkLogin = async (username, password) => {
+const checkLogin = async (accountName, password) => {
     try {
-        const user = await userDB.loginByName(username, utils.hashPassword(password)) ;
+        console.log(accountName);
+        const user = await userRepo.login(
+            accountName,
+            utils.hashPassword(password)
+        );
+        console.log(user);
         if (user && user.isActive) {
-            return jwt.sign(
-                {user},
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '1d' }
-            );
+            await user.save();
+            return jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d',
+            });
         } else {
-            throw new Error("500" , "user is exist")
+            throw new Error('500', 'login fail');
         }
     } catch (err) {
         throw err;
     }
 };
 
-const register = async (username, password, email, fullname, dob) => {
+const register = async (userRegister) => {
     try {
-        return await userService.createNewUser(
-            username,
-            password,
-            email,
-            fullname,
-            dob
-        );
+        return await userService.createNewUser(userRegister);
     } catch (err) {
         throw err;
     }
 };
-
-
 
 module.exports = { checkLogin, register };
