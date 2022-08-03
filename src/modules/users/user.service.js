@@ -47,7 +47,7 @@ const createNewUser = async (userRegister) => {
             console.log(user);
             return true;
         } else {
-            return false;
+            throw new Error('400', 'Create new user fail');
         }
     } else {
         throw new Error('500', 'user exists');
@@ -67,6 +67,7 @@ const forgotPassword = async (email, activeCode, password) => {
 
 const changePassword = async (email, password, newPassword) => {
     const user = await userRepo.findUserByEmail(email);
+    console.log(user);
     if (user.password === functionUtils.hashPassword(password)) {
         user.password = functionUtils.hashPassword(newPassword);
         return await user.save();
@@ -78,8 +79,10 @@ const changePassword = async (email, password, newPassword) => {
 const updateUserInfo = async (userUpdate) => {
     const user = await userRepo.findUserByEmail(userUpdate.email);
     if (user) {
-        user.dob = userUpdate.dob;
-        user.fullname = userUpdate.fullname;
+        user.dob = userUpdate.dob ? userUpdate.dob : user.dob;
+        user.fullname = userUpdate.fullname
+            ? userUpdate.fullname
+            : user.fullname;
         console.log(user);
         await user.save();
         console.log(user);

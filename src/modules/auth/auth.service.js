@@ -14,9 +14,17 @@ const checkLogin = async (accountName, password) => {
         console.log(user);
         if (user && user.isActive) {
             await user.save();
-            return jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: '1d',
-            });
+            return jwt.sign(
+                {
+                    username: user.username,
+                    email: user.email,
+                    fullname: user.fullname,
+                },
+                process.env.ACCESS_TOKEN_SECRET,
+                {
+                    expiresIn: '1d',
+                }
+            );
         } else {
             throw new Error('500', 'login fail');
         }

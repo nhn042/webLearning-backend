@@ -7,13 +7,15 @@ const checkLogin = (req, res, next) => {
     if (token) {
         try {
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            const payload = jwt.decode(token);
+            req.body.email = payload.email;
             next();
         } catch (err) {
-            next(new Error("500" , "User is not login"));
+            next(new Error('500', 'User is not login'));
         }
     } else {
-        next(new Error("500" , "User is not login"));
+        next(new Error('500', 'User is not login'));
     }
 };
 
-module.exports = {checkLogin};
+module.exports = { checkLogin };

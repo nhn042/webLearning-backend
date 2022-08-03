@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const photoSchema = new Schema({
-    id: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true,
-    },
     userId: {
         type: mongoose.SchemaTypes.ObjectId,
         required: true,
@@ -13,7 +9,7 @@ const photoSchema = new Schema({
     albumId: {
         type: mongoose.SchemaTypes.ObjectId,
     },
-    name: {
+    photoName: {
         type: String,
         required: true,
     },
@@ -30,7 +26,11 @@ const photoSchema = new Schema({
         default: () => Date.now(),
         required: true,
     },
-    url: {
+    path: {
+        type: String,
+        required: true,
+    },
+    size: {
         type: String,
         required: true,
     },

@@ -9,8 +9,11 @@ const userAlbumSchema = new Schema({
     albumId: {
         type: Schema.Types.ObjectId,
         required: true,
-    }
-    
+    },
+    role: {
+        type: Number,
+        default: 0,
+    },
 });
 
 module.exports = mongoose.model('userAlbum', userAlbumSchema);

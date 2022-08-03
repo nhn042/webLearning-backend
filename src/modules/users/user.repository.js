@@ -1,38 +1,29 @@
 const User = require('./user.model');
 
 const checkUserExists = async (username, password, email) => {
-    try {
-        const count = await User.find({
-            username: username,
-            password: password,
-            email: email,
-        }).count();
-        return count > 0 ? true : false;
-    } catch (err) {}
+    return (await User.find({
+        username: username,
+        password: password,
+        email: email,
+    }).count()) > 0
+        ? true
+        : false;
 };
 
 const login = async (username, password) => {
-    try {
-        const user =
-            (await User.findOne({
-                username: username,
-                password: password,
-            })) ||
-            (await User.findOne({
-                email: username,
-                password: password,
-            }));
-        return user;
-    } catch (err) {}
+    return (user =
+        (await User.findOne({
+            username: username,
+            password: password,
+        })) ||
+        (await User.findOne({
+            email: username,
+            password: password,
+        })));
 };
 
 const findUserByEmail = async (email) => {
-    try {
-        const user = await User.findOne({ email: email });
-        return user;
-    } catch (err) {
-        throw err;
-    }
+    return await User.findOne({ email: email });
 };
 
 const createNewUser = async (userRegister) => {
@@ -43,11 +34,7 @@ const createNewUser = async (userRegister) => {
         fullname: userRegister.fullname,
         dob: userRegister.dob,
     });
-    try {
-        return await user.save();
-    } catch (err) {
-        throw err;
-    }
+    return await user.save();
 };
 
 module.exports = {

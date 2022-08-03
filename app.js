@@ -5,7 +5,8 @@ require('dotenv').config({ path: './src/configs/.env' });
 const authRoute = require('./src/modules/auth/auth.route');
 const userRoute = require('./src/modules/users/user.route');
 const bodyParser = require('body-parser');
-const { Error } = require('./src/commons/errorHandling');
+const albumRoute = require('./src/modules/albums/album.route');
+const photoRoute = require('./src/modules/photos/photo.route');
 
 const app = express();
 connectDB();
@@ -13,6 +14,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(authRoute);
 app.use(userRoute);
+app.use(albumRoute);
+app.use(photoRoute);
 
 app.use((err, req, res, next) => {
     res.status(err.errorCode).send(err.errorMessage);

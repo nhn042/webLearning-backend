@@ -3,7 +3,7 @@
 # Content-Type: application/json
 
 # {
-#     "username" : "diemquynh",
+#     "username" : "minhhieu",
 #     "password" : "d4dfdf",
 #     "email" : "19021274@vnu.edu.vn",
 #     "fullname" : "Dang Minh Hieu",
@@ -14,18 +14,16 @@
 # Content-Type: application/json
 
 # {
-#     "account" : "19021274@vnu.edu.vn",
+#     "account" : "minhhieu",
 #     "password" : "d4dfdf"
 # }
 
 # PATCH http://localhost:8080/update-userInfo
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYyZThjMDBlMDA4YTc4OTA2NDY5MDk2ZiIsInVzZXJuYW1lIjoiZGllbXF1eW5oIiwicGFzc3dvcmQiOiJCa3k2dUtmbFdCQ2QyOG5KaUNDR01ja04rVnRURFlXdEtvOEYzb1R4M0ZZPSIsImVtYWlsIjoiMTkwMjEyNzRAdm51LmVkdS52biIsImZ1bGxuYW1lIjoiRGFuZyBNaW5oIEhpZXUiLCJkb2IiOiIyMDAxLTAxLTAxVDAwOjAwOjAwLjAwMFoiLCJpc0FjdGl2ZSI6dHJ1ZSwiYWN0aXZlQ29kZSI6NDkyMywiY3JlYXRlZEF0IjoiMjAyMi0wOC0wMlQwNjoxMToyNi45OTFaIiwidXBkYXRlZEF0IjoiMjAyMi0wOC0wMlQwNjoxMToyNi45OTJaIiwiX192IjowfSwiaWF0IjoxNjU5NDIwOTQ4LCJleHAiOjE2NTk1MDczNDh9.brJJDUqVVxarzispKQM1idW6MpI10Pemz8YwHrpDPI4
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpZW1xdXluaCIsImVtYWlsIjoiMTkwMjEyNzRAdm51LmVkdS52biIsImZ1bGxuYW1lIjoiRGFuZyBNaW5oIEhpZXUiLCJpYXQiOjE2NTk0MjgxNzIsImV4cCI6MTY1OTUxNDU3Mn0.o-j-wiVOlSeS_UDcBEL5okTIybYHe-IYHV2a4z5p6VI
 # Content-Type: application/json
 
 # {
-#     "email" : "19021274@vnu.edu.vn",
-#     "dob": "2000-01-30",
-#     "fullname": "Dang Hieu"
+#     "dob" : "2000-01"
 # }
 
 # POST http://localhost:8080/activate
@@ -33,5 +31,28 @@
 
 # {
 #     "email" : "19021274@vnu.edu.vn",
-#     "otp" : 4923
+#     "otp" : 4734
 # }
+
+# POST http://localhost:8080/album
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhoaWV1IiwiZW1haWwiOiIxOTAyMTI3NEB2bnUuZWR1LnZuIiwiZnVsbG5hbWUiOiJEYW5nIE1pbmggSGlldSIsImlhdCI6MTY1OTQ5MzMzNiwiZXhwIjoxNjU5NTc5NzM2fQ.0GXi-MNk8UBmsRUnxkaNArXl8OZATqpxxWsxZtuI-HU
+# Content-Type: application/json
+
+# {
+#     "albumname" : "VMOOO",
+#     "description" : "cong ty"
+# }
+
+# PUT http://localhost:8080/album/62e9f0e0da32f9ea30e6c5e5
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhoaWV1IiwiZW1haWwiOiIxOTAyMTI3NEB2bnUuZWR1LnZuIiwiZnVsbG5hbWUiOiJEYW5nIE1pbmggSGlldSIsImlhdCI6MTY1OTQ5MzMzNiwiZXhwIjoxNjU5NTc5NzM2fQ.0GXi-MNk8UBmsRUnxkaNArXl8OZATqpxxWsxZtuI-HU
+# Content-Type: application/json
+
+# {
+#     "albumname" : "VMO",
+#     "description" : "cong doan"
+# }
+
+# DELETE http://localhost:8080/album/62e9e1fc04ba869ccdb92203
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhoaWV1IiwiZW1haWwiOiIxOTAyMTI3NEB2bnUuZWR1LnZuIiwiZnVsbG5hbWUiOiJEYW5nIE1pbmggSGlldSIsImlhdCI6MTY1OTQ5MzMzNiwiZXhwIjoxNjU5NTc5NzM2fQ.0GXi-MNk8UBmsRUnxkaNArXl8OZATqpxxWsxZtuI-HU
+# Content-Type: application/json
+
