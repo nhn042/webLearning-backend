@@ -2,7 +2,7 @@ const userAlbums = require('./userAlbum.model');
 const album = require('../albums/album.model');
 
 const createUserAlbum = async (userId, albumId, role) => {
-    return userAlbums.create({
+    return await userAlbums.create({
         userId: userId,
         albumId: albumId,
         role: role,
@@ -10,10 +10,12 @@ const createUserAlbum = async (userId, albumId, role) => {
 };
 
 const checkAlbumExist = async (userId, albumname) => {
-    const userAlbum = await userAlbums
-        .find({ userId })
-        .populate({ path: 'albumId', model: album });
-    return !!userAlbum.find((item) => item.albumId.albumname === albumname);
+    const userAlbum = await userAlbums.find({ userId }).populate({ path: 'albumId', model: album });
+    if (!userAlbum) {
+        return false;
+    } else {
+        return !!userAlbum.find((item) => item.albumId.albumname === albumname);
+    }
 };
 
 const findUserAlbum = async (userId) => {
@@ -22,18 +24,17 @@ const findUserAlbum = async (userId) => {
 };
 
 const deleteUserAlbum = async (userId, albumId) => {
-    console.log('hhh');
     return userAlbums.deleteOne({ userId: userId, albumId: albumId });
 };
 
 const hasPermission = async (userId, albumname) => {
-    const userAlbum = await userAlbums
-        .find({ userId })
-        .populate({ path: 'albumId', model: album });
-    return userAlbum.find((item) => item.albumId.albumname === albumname)
-        .role === 1
-        ? true
-        : false;
+    const userAlbum = await userAlbums.find({ userId }).populate({ path: 'albumId', model: album });
+    return userAlbum.find((item) => item.albumId.albumname === albumname).role >= 1 ? true : false;
+};
+
+const isOwnerAlbum = async (userId, albumname) => {
+    const userAlbum = await userAlbums.find({ userId }).populate({ path: 'albumId', model: album });
+    return userAlbum.find((item) => item.albumId.albumname === albumname).role === 2 ? true : false;
 };
 
 module.exports = {
@@ -42,4 +43,5 @@ module.exports = {
     checkAlbumExist,
     deleteUserAlbum,
     hasPermission,
+    isOwnerAlbum,
 };

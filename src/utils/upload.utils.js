@@ -1,10 +1,8 @@
 const multer = require('multer');
 const path = require('path');
-const { nextTick } = require('process');
 
 const fileFilter = (req, file, cb) => {
-    const extname = path.extname(file.originalname).toLowerCaser();
-    console.log(extname);
+    const extname = path.extname(file.originalname).toLowerCase();
     try {
         if (extname === '.jpg' || extname === '.jpeg' || extname === '.png') {
             cb(null, true);
@@ -18,16 +16,13 @@ const fileFilter = (req, file, cb) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        console.log('ggfg');
-        cb(null, path.join(__dirname, '../assets/uploads/photos'));
+        cb(null, 'src/assets/uploads/photos');
     },
     filename: function (req, file, cb) {
-        console.log('ggsssfg');
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 100);
-        cb(null, file.fieldname + '/' + uniqueSuffix);
+        cb(null, file.fieldname + String(Math.round(Math.random() * 100)) + path.extname(file.originalname));
     },
 });
 
-const uploadPhotos = multer({ storage: storage, fileFilter }).array('img', 5);
+const uploadPhotos = multer({ storage: storage, fileFilter });
 
 module.exports = { uploadPhotos };

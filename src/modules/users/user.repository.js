@@ -11,7 +11,7 @@ const checkUserExists = async (username, password, email) => {
 };
 
 const login = async (username, password) => {
-    return (user =
+    return (
         (await User.findOne({
             username: username,
             password: password,
@@ -19,11 +19,16 @@ const login = async (username, password) => {
         (await User.findOne({
             email: username,
             password: password,
-        })));
+        }))
+    );
 };
 
 const findUserByEmail = async (email) => {
     return await User.findOne({ email: email });
+};
+
+const findUserByAccount = async (account) => {
+    return (await User.findOne({ email: account })) || (await User.findOne({ username: account }));
 };
 
 const createNewUser = async (userRegister) => {
@@ -40,6 +45,7 @@ const createNewUser = async (userRegister) => {
 module.exports = {
     login,
     findUserByEmail,
+    findUserByAccount,
     createNewUser,
     checkUserExists,
 };

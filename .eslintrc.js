@@ -12,5 +12,6 @@ module.exports = {
         indent: off,
         console: off,
         tabs: off,
+        'max-len': ['error', { code: 150 }],
     },
-}
+};

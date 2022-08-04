@@ -8,35 +8,39 @@ const findPhoto = async (photoId) => {
     return await Photos.findOne({ _id: photoId });
 };
 
-const updatePhoto = async (photoInfo) => {
+const updatePhoto = async (photoId, photoName) => {
     return await Photos.updateOne(
-        { _id: photoInfo.photoId },
-        { $set: { name: photoInfo.name, description: photoInfo.description } }
+        { _id: photoId },
+        {
+            $set: {
+                photoName: photoName,
+            },
+        }
     );
 };
 
 const deleteAllPhotoInAlbum = async (albumId) => {
-    await Photos.deleteMany({ albumId });
+    return await Photos.deleteMany({ albumId });
 };
 
 const deletePhoto = async (photoId) => {
-    await Photos.delete({ photoId });
+    return await Photos.deleteOne({ _id: photoId });
 };
 
 const checkPhotoExistsInAlbum = async (albumId, photoName) => {
-    return (await Photos.find({
-        albumId: albumId,
-        photoName: photoName,
-    }).count) > 0
-        ? true
-        : false;
+    return (
+        (await Photos.find({
+            albumId: albumId,
+            photoName: photoName,
+        }).count()) > 0
+    );
 };
 
 const checkPhotoExistsInUser = async (userId, photoName) => {
     return (await Photos.find({
         userId: userId,
         photoName: photoName,
-    }).count) > 0
+    }).count()) > 0
         ? true
         : false;
 };

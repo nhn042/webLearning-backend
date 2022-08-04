@@ -6,12 +6,7 @@ const { Error } = require('../../commons/errorHandling');
 
 const checkLogin = async (accountName, password) => {
     try {
-        console.log(accountName);
-        const user = await userRepo.login(
-            accountName,
-            utils.hashPassword(password)
-        );
-        console.log(user);
+        const user = await userRepo.login(accountName, utils.hashPassword(password));
         if (user && user.isActive) {
             await user.save();
             return jwt.sign(

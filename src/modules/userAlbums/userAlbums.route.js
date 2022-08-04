@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const userAlbumsService = require('./userAlbums.service');
+const userAlbumsController = require('./userAlbums.controller');
 const { checkLogin } = require('../../utils/middleware.utils');
 
-router.post('/createAlbums', checkLogin, userAlbumsService.createAlbum);
+router.post('/user-album', checkLogin, userAlbumsController.addUserAlbum);
+router.delete('/user-album/:id', checkLogin, userAlbumsController.deleteUserAlbum);
+router.put('/user-album/:id', checkLogin, userAlbumsController.grantPermission);
+
+module.exports = router;

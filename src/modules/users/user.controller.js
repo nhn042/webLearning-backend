@@ -29,9 +29,7 @@ const resendToken = async (req, res, next) => {
 const forgotPassword = async (req, res, next) => {
     const { email, activeCode, password } = req.body;
     try {
-        res.status(200).json(
-            await userService.forgotPassword(email, activeCode, password)
-        );
+        res.status(200).json(await userService.forgotPassword(email, activeCode, password));
     } catch (err) {
         next(err);
     }

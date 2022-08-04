@@ -29,7 +29,7 @@ const validateRegister = async (req, res, next) => {
 const validateLogin = async (req, res, next) => {
     const schema = Joi.object({
         account:
-            Joi.string().trim().min(1).max(30) ||
+            Joi.string().trim() ||
             Joi.string()
                 .trim()
                 .email({

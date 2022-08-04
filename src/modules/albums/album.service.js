@@ -7,33 +7,43 @@ const userRepo = require('../users/user.repository');
 const createAlbum = async (albumInfo) => {
     const user = await userRepo.findUserByEmail(albumInfo.email);
     console.log(albumInfo);
-    if (await userAlbumService.checkAlbumExist(user.id, albumInfo.albumname)) {
-        throw new Error('400', 'this album is exist in your user');
-    }
     try {
+        if (await userAlbumRepo.checkAlbumExist(user.id, albumInfo.albumname)) {
+            throw new Error('400', 'this album is exist in your user');
+        }
         const album = await albumRepo.createAlbum(albumInfo);
         console.log(album);
-        if (await userAlbumService.createNewUserAlbum(user.id, album.id, 1)) {
+        if (await userAlbumService.createNewUserAlbum(user.id, album.id, 2)) {
             return true;
         } else {
             throw new Error('500', 'create user album fail');
         }
     } catch (err) {
-        if (err.errorCode === '400') throw err;
-        else throw new Error('500', 'create album fail');
+        if (err instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(500, 'Can not create album');
+        }
     }
 };
 
 const updateAlbum = async (albumInfo) => {
     const user = await userRepo.findUserByEmail(albumInfo.email);
     console.log(user.id);
-    if (await userAlbumService.checkAlbumExist(user.id, albumInfo.albumname)) {
-        throw new Error('400', 'this album is exist in your user');
-    }
     try {
+        if (await userAlbumRepo.checkAlbumExist(user.id, albumInfo.albumname)) {
+            throw new Error('400', 'this album is exist in your user');
+        }
+        if (!(await userAlbumRepo.isOwnerAlbum(user.id, albumInfo.albumname))) {
+            throw new Error('403', 'you are not owner . You can not update album');
+        }
         return await albumRepo.updateAlbum(albumInfo);
     } catch (err) {
-        throw new Error('500', 'update album fail');
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(500, 'Can not update album');
+        }
     }
 };
 
@@ -41,12 +51,16 @@ const deleteAlbum = async (albumInfo) => {
     const user = await userRepo.findUserByEmail(albumInfo.email);
     console.log(user.id);
     try {
-        return (
-            (await albumRepo.deleteAlbum(albumInfo.albumId)) &&
-            (await userAlbumRepo.deleteUserAlbum(user.id, albumInfo.albumId))
-        );
+        if (!(await userAlbumRepo.isOwnerAlbum(user.id, albumInfo.albumname))) {
+            throw new Error('403', 'you are not owner . You can not delete album');
+        }
+        return (await albumRepo.deleteAlbum(albumInfo.albumId)) && (await userAlbumRepo.deleteUserAlbum(user.id, albumInfo.albumId));
     } catch (err) {
-        throw new Error('500', 'delete album fail');
+        if (error instanceof Error) {
+            throw error;
+        } else {
+            throw new Error(500, 'Can not delete album');
+        }
     }
 };
 
