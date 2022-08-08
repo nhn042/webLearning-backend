@@ -11,24 +11,52 @@ const addPhotos = async (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     const payload = jwt.decode(token);
-    req.body.email = payload.email;
-    console.log(req.files);
+    req.body.userId = payload.userId;
     try {
         if (await photoService.addPhotos(req.files, req.body)) {
             res.status(200).send('upload photo success');
         } else {
-            res.status(500).send('upload photo fail');
+            res.status(500).send('All images are exist in album');
         }
     } catch (err) {
-        console.log(err);
+        res.status(err.errorCode).json(err.errorMessage);
+        next(err);
+    }
+};
+
+const getAllPhotoInAlbum = async (req, res, next) => {
+    const albumId = req.params.id;
+    try {
+        const photoList = await photoService.getAllPhotoInAlbum(req.body.userId, albumId);
+        if (photoList.length > 0) {
+            res.status(200).send(photoList);
+        } else {
+            res.status(500).send('This album do not have any photo');
+        }
+    } catch (err) {
+        res.status(err.errorCode).json(err.errorMessage);
+        next(err);
+    }
+};
+
+const getAllPhotoInUser = async (req, res, next) => {
+    try {
+        const photoList = await photoService.getAllPhotoInUser(req.body.userId);
+        if (photoList.length > 0) {
+            res.status(200).send(photoList);
+        } else {
+            res.status(500).send('This user do not have any photo');
+        }
+    } catch (err) {
         res.status(err.errorCode).json(err.errorMessage);
         next(err);
     }
 };
 
 const deletePhoto = async (req, res, next) => {
+    req.body.photoId = req.params.id;
     try {
-        await photoService.deletePhoto(req.params.id);
+        await photoService.deletePhoto(req.body);
         res.status(200).send('delete photo success');
     } catch (err) {
         res.status(err.errorCode).json(err.errorMessage);
@@ -39,11 +67,16 @@ const deletePhoto = async (req, res, next) => {
 const updatePhoto = async (req, res, next) => {
     try {
         req.body.photoId = req.params.id;
-        await photoService.updatePhoto(req.body);
-        res.status(200).send('update photo success');
+        const updateCheck = await photoService.updatePhoto(req.body);
+        if (updateCheck) {
+            res.status(200).send('update photo success');
+        } else {
+            res.status(500).send('update photo fail');
+        }
     } catch (err) {
         res.status(err.errorCode).json(err.errorMessage);
+        next(err);
     }
 };
 
-module.exports = { addPhotos, deletePhoto, updatePhoto };
+module.exports = { addPhotos, deletePhoto, updatePhoto, getAllPhotoInAlbum, getAllPhotoInUser };

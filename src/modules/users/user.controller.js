@@ -15,22 +15,33 @@ const activateUser = async (req, res, next) => {
             res.status(400).send('fail activate email');
         }
     } catch (err) {
+        res.status(err.errorCode).json(err.errorMessage);
         next(err);
     }
 };
 
 const resendToken = async (req, res, next) => {
     try {
-        res.status(200).json(await userService.resendToken(req.body.email));
+        if (await userService.resendToken(req.body.email)) {
+            res.status(200).json('Resend OTP success');
+        } else {
+            res.status(400).send('Resend OTP fail');
+        }
     } catch (err) {
+        res.status(err.errorCode).json(err.errorMessage);
         next(err);
     }
 };
 const forgotPassword = async (req, res, next) => {
     const { email, activeCode, password } = req.body;
     try {
-        res.status(200).json(await userService.forgotPassword(email, activeCode, password));
+        if (await userService.forgotPassword(email, activeCode, password)) {
+            res.status(200).json('change forgot-password success');
+        } else {
+            res.status(400).send('change forgot-password fail');
+        }
     } catch (err) {
+        res.status(err.errorCode).json(err.errorMessage);
         next(err);
     }
 };
@@ -45,6 +56,7 @@ const changePassword = async (req, res, next) => {
             res.status(400).send('change pass fail');
         }
     } catch (err) {
+        res.status(err.errorCode).json(err.errorMessage);
         next(err);
     }
 };
@@ -58,6 +70,7 @@ const updateUserInfo = async (req, res, next) => {
             res.status(400).send('update fail');
         }
     } catch (err) {
+        res.status(err.errorCode).json(err.errorMessage);
         next(err);
     }
 };

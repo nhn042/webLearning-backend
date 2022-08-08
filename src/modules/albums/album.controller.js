@@ -10,6 +10,22 @@ const createAlbum = async (req, res, next) => {
             res.status(400).send('create album fail');
         }
     } catch (err) {
+        res.status(err.errorCode).send(err.errorMessage);
+        next(err);
+    }
+};
+
+const getAllAlbumOfUser = async (req, res, next) => {
+    const userId = req.body.userId;
+    try {
+        const allAlbumOfUser = await albumService.getAllAlbumOfUser(userId);
+        if (allAlbumOfUser) {
+            res.status(200).send(allAlbumOfUser);
+        } else {
+            res.status(400).send('get all album fail');
+        }
+    } catch (err) {
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -24,6 +40,7 @@ const updateAlbum = async (req, res, next) => {
             res.status(400).send('Update album fail');
         }
     } catch (err) {
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -38,8 +55,13 @@ const deleteAlbum = async (req, res, next) => {
             res.status(400).send('delete album fail');
         }
     } catch (err) {
-        next(err);
+        if (err instanceof Error) {
+            res.sendStatus(err.errorCode).send(err.errorMessage);
+            next(err);
+        } else {
+            next(err);
+        }
     }
 };
 
-module.exports = { createAlbum, updateAlbum, deleteAlbum };
+module.exports = { createAlbum, updateAlbum, deleteAlbum, getAllAlbumOfUser };

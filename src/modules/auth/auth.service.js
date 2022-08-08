@@ -8,9 +8,9 @@ const checkLogin = async (accountName, password) => {
     try {
         const user = await userRepo.login(accountName, utils.hashPassword(password));
         if (user && user.isActive) {
-            await user.save();
             return jwt.sign(
                 {
+                    userId: user._id.toString(),
                     username: user.username,
                     email: user.email,
                     fullname: user.fullname,
@@ -31,8 +31,8 @@ const checkLogin = async (accountName, password) => {
 const register = async (userRegister) => {
     try {
         return await userService.createNewUser(userRegister);
-    } catch (err) {
-        throw err;
+    } catch (error) {
+        throw error;
     }
 };
 

@@ -19,7 +19,6 @@ const validateActivateUser = async (req, res, next) => {
 const validateResendToken = async (req, res, next) => {
     const schema = Joi.object({
         email: Joi.string()
-            .trim()
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'vn'] } })
             .required(),
     });
@@ -51,16 +50,12 @@ const validateForgotPassword = async (req, res, next) => {
 
 const validateChangePassword = async (req, res, next) => {
     const schema = Joi.object({
-        email: Joi.string()
-            .trim()
-            .email({ minDomainSegments: 2, tlds: { allow: ['com', 'vn'] } })
-            .required(),
         password: Joi.string().trim().min(5).required(),
         newPassword: Joi.string().trim().min(5).required(),
     });
-    const { email, password, newPassword } = req.body;
+    const { password, newPassword } = req.body;
     try {
-        await schema.validateAsync({ email, password, newPassword });
+        await schema.validateAsync({ password, newPassword });
         next();
     } catch (e) {
         next(new Error('400', e.details[0].message));

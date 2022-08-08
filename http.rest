@@ -34,23 +34,27 @@
 #     "otp" : 4734
 # }
 
-# POST http://localhost:8080/album
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhoaWV1IiwiZW1haWwiOiIxOTAyMTI3NEB2bnUuZWR1LnZuIiwiZnVsbG5hbWUiOiJEYW5nIE1pbmggSGlldSIsImlhdCI6MTY1OTQ5MzMzNiwiZXhwIjoxNjU5NTc5NzM2fQ.0GXi-MNk8UBmsRUnxkaNArXl8OZATqpxxWsxZtuI-HU
+# POST http://localhost:8080/album/
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MmVlODljNTE0MzQ5OGJkNWZkZTM0NjkiLCJ1c2VybmFtZSI6Im1oNDQzOCIsImVtYWlsIjoibWhpZXUzMTAxQGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiTWluaCBIaWV1IiwiaWF0IjoxNjU5ODAyOTMwLCJleHAiOjE2NTk4ODkzMzB9.BVkrL8kmNrx6G5UwSS_RHhdIz1zXmyIiCcBg6G0LojM
 # Content-Type: application/json
 
 # {
-#     "albumname" : "VMOOO",
-#     "description" : "cong ty"
+#     "albumname" : "album2",
+#     "description" : "mh4438"
 # }
 
-# PUT http://localhost:8080/album/62e9f0e0da32f9ea30e6c5e5
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhoaWV1IiwiZW1haWwiOiIxOTAyMTI3NEB2bnUuZWR1LnZuIiwiZnVsbG5hbWUiOiJEYW5nIE1pbmggSGlldSIsImlhdCI6MTY1OTQ5MzMzNiwiZXhwIjoxNjU5NTc5NzM2fQ.0GXi-MNk8UBmsRUnxkaNArXl8OZATqpxxWsxZtuI-HU
+# GET http://localhost:8080/photos/62ee995f73423d2eaa600515
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MmVlODljNTE0MzQ5OGJkNWZkZTM0NjkiLCJ1c2VybmFtZSI6Im1oNDQzOCIsImVtYWlsIjoibWhpZXUzMTAxQGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiTWluaCBIaWV1IiwiaWF0IjoxNjU5ODU4MTI0LCJleHAiOjE2NTk5NDQ1MjR9.e6uH1xcNyV80FZ50ALb759RwgTxMpXQBU1-zGf0W7BU
 # Content-Type: application/json
 
-# {
-#     "albumname" : "VMO",
-#     "description" : "cong doan"
-# }
+PUT http://localhost:8080/album/62ef8fe12cd291e2e8690fea
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MmVlODljNTE0MzQ5OGJkNWZkZTM0NjkiLCJ1c2VybmFtZSI6Im1oNDQzOCIsImVtYWlsIjoibWhpZXUzMTAxQGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiTWluaCBIaWV1IiwiaWF0IjoxNjU5ODY4MTY0LCJleHAiOjE2NTk5NTQ1NjR9.LhblcxjK5PeZIaS9GG_q_wZ6aByHkTzwKQ9SqApzhCE
+Content-Type: application/json
+
+{
+    "albumname" : "album5",
+    "description" : "cong doan"
+}
 
 # DELETE http://localhost:8080/album/62e9e1fc04ba869ccdb92203
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhoaWV1IiwiZW1haWwiOiIxOTAyMTI3NEB2bnUuZWR1LnZuIiwiZnVsbG5hbWUiOiJEYW5nIE1pbmggSGlldSIsImlhdCI6MTY1OTQ5MzMzNiwiZXhwIjoxNjU5NTc5NzM2fQ.0GXi-MNk8UBmsRUnxkaNArXl8OZATqpxxWsxZtuI-HU

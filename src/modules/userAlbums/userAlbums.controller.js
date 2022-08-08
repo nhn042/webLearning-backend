@@ -10,6 +10,21 @@ const addUserAlbum = async (req, res, next) => {
     }
 };
 
+const getMemberInAlbum = async (req, res, next) => {
+    try {
+        const albumId = req.params.id;
+        const memberInfos = await userAlbumService.getMemberInAlbum(req.body.userId, albumId);
+        if (memberInfos.length > 0) {
+            res.status(200).send(memberInfos);
+        } else {
+            res.status(400).send('This album do not have any member');
+        }
+    } catch (err) {
+        res.status(err.errorCode).json(err.errorMessage);
+        next(err);
+    }
+};
+
 const deleteUserAlbum = async (req, res, next) => {
     try {
         req.body.albumId = req.params.id;
@@ -36,4 +51,5 @@ module.exports = {
     addUserAlbum,
     deleteUserAlbum,
     grantPermission,
+    getMemberInAlbum,
 };

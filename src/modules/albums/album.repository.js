@@ -9,12 +9,10 @@ const findAlbumByName = async (albumname) => {
 };
 
 const createAlbum = async (albumInfo) => {
-    const album = new Album({
+    return Album.create({
         albumname: albumInfo.albumname,
         description: albumInfo.description,
     });
-    await album.save();
-    return album;
 };
 
 const updateAlbum = async (albumInfo) => {

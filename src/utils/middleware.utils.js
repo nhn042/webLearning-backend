@@ -9,6 +9,7 @@ const checkLogin = (req, res, next) => {
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
             const payload = jwt.decode(token);
             req.body.email = payload.email;
+            req.body.userId = payload.userId;
             next();
         } catch (err) {
             next(new Error('500', 'User is not login'));

@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 const albumRoute = require('./src/modules/albums/album.route');
 const photoRoute = require('./src/modules/photos/photo.route');
 const userAlbumRoute = require('./src/modules/userAlbums/userAlbums.route');
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 
 const app = express();
 connectDB();
@@ -19,6 +21,26 @@ app.use(userRoute);
 app.use(albumRoute);
 app.use(photoRoute);
 app.use(userAlbumRoute);
+
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Album Management API',
+            version: '1.0.0',
+            description: 'Album Management',
+        },
+        servers: [
+            {
+                url: 'http://localhost:8080',
+            },
+        ],
+    },
+    apis: ['./src/modules/**/*.js'],
+};
+
+const specs = swaggerJsDoc(options);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use((err, req, res, next) => {
     if (err instanceof Error) res.status(err.errorCode).send(err.errorMessage);

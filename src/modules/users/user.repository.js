@@ -1,11 +1,13 @@
 const User = require('./user.model');
 
-const checkUserExists = async (username, password, email) => {
+const checkUserExists = async (username, email) => {
     return (await User.find({
-        username: username,
-        password: password,
         email: email,
-    }).count()) > 0
+    }).count()) +
+        (await User.find({
+            username: username,
+        }).count()) >
+        0
         ? true
         : false;
 };
@@ -32,14 +34,13 @@ const findUserByAccount = async (account) => {
 };
 
 const createNewUser = async (userRegister) => {
-    const user = new User({
+    return await User.create({
         username: userRegister.username,
         password: userRegister.password,
         email: userRegister.email,
         fullname: userRegister.fullname,
         dob: userRegister.dob,
     });
-    return await user.save();
 };
 
 module.exports = {

@@ -23,6 +23,14 @@ const deleteAllPhotoInAlbum = async (albumId) => {
     return await Photos.deleteMany({ albumId });
 };
 
+const getAllPhotoInAlbum = async (albumId) => {
+    return await Photos.find({ albumId }).select({ userId: 1, photoName: 1, path: 1 });
+};
+
+const getAllPhotoInUser = async (userId) => {
+    return await Photos.find({ userId }).select({ albumId: 1, photoName: 1, path: 1 });
+};
+
 const deletePhoto = async (photoId) => {
     return await Photos.deleteOne({ _id: photoId });
 };
@@ -53,4 +61,6 @@ module.exports = {
     updatePhoto,
     deletePhoto,
     deleteAllPhotoInAlbum,
+    getAllPhotoInAlbum,
+    getAllPhotoInUser,
 };

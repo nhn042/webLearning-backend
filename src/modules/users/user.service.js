@@ -5,13 +5,10 @@ const { Error } = require('../../commons/errorHandling');
 const activateUser = async (email, otp) => {
     try {
         const user = await userRepo.findUserByEmail(email);
-        console.log(user);
         const otpCode = user.activeCode;
-        console.log(otpCode);
         if (otp === otpCode) {
             user.isActive = true;
             await user.save();
-            console.log(user);
             return true;
         } else {
             throw new Error('400', 'activate user fail');
@@ -42,12 +39,10 @@ const resendToken = async (email) => {
 
 const createNewUser = async (userRegister) => {
     try {
-        if (!(await userRepo.checkUserExists(userRegister.username, userRegister.password, userRegister.email))) {
-            const newUser = await userRepo.createNewUser(userRegister);
-            const user = await userRepo.findUserByEmail(userRegister.email);
-            user.activeCode = await functionUtils.sendOTPtoMail(userRegister.email);
-            await user.save();
-            return true;
+        if (!(await userRepo.checkUserExists(userRegister.username, userRegister.email))) {
+            const user = await userRepo.createNewUser(userRegister);
+            user.activeCode = await functionUtils.sendOTPtoMail(user.email);
+            return await user.save();
         } else {
             throw new Error('500', 'user exists');
         }
@@ -82,7 +77,6 @@ const forgotPassword = async (email, activeCode, password) => {
 const changePassword = async (email, password, newPassword) => {
     try {
         const user = await userRepo.findUserByEmail(email);
-        console.log(user);
         if (user.password === functionUtils.hashPassword(password)) {
             user.password = functionUtils.hashPassword(newPassword);
             return await user.save();
@@ -104,9 +98,7 @@ const updateUserInfo = async (userUpdate) => {
         if (user) {
             user.dob = userUpdate.dob ? userUpdate.dob : user.dob;
             user.fullname = userUpdate.fullname ? userUpdate.fullname : user.fullname;
-            console.log(user);
             await user.save();
-            console.log(user);
             return user;
         } else {
             throw new Error('400', 'update is not success');
