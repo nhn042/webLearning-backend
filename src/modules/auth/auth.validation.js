@@ -22,7 +22,7 @@ const validateRegister = async (req, res, next) => {
         });
         next();
     } catch (e) {
-        next(new Error('400', e.details[0].message));
+        next(new Error(400, e.details[0].message));
     }
 };
 
@@ -43,7 +43,7 @@ const validateLogin = async (req, res, next) => {
         await schema.validateAsync({ account, password });
         next();
     } catch (e) {
-        next(new Error('400', e.details[0].message));
+        next(new Error(400, e.details[0].message));
     }
 };
 

@@ -7,7 +7,10 @@ const { Error } = require('../../commons/errorHandling');
 const checkLogin = async (accountName, password) => {
     try {
         const user = await userRepo.login(accountName, utils.hashPassword(password));
-        if (user && user.isActive) {
+        if (!user) {
+            throw new Error(400, 'Can not find this user');
+        }
+        if (user.isActive) {
             return jwt.sign(
                 {
                     userId: user._id.toString(),
@@ -21,18 +24,19 @@ const checkLogin = async (accountName, password) => {
                 }
             );
         } else {
-            throw new Error('500', 'login fail');
+            throw new Error(400, 'this user is not active');
         }
     } catch (err) {
-        throw err;
+        if (err instanceof Error) throw err;
+        throw new Error(500, 'Internal server error');
     }
 };
 
 const register = async (userRegister) => {
     try {
-        return await userService.createNewUser(userRegister);
-    } catch (error) {
-        throw error;
+        await userService.createNewUser(userRegister);
+    } catch (err) {
+        throw err;
     }
 };
 

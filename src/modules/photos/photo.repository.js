@@ -19,8 +19,12 @@ const updatePhoto = async (photoId, photoName) => {
     );
 };
 
-const deleteAllPhotoInAlbum = async (albumId) => {
+const deleteAllPhotosInAlbum = async (albumId) => {
     return await Photos.deleteMany({ albumId });
+};
+
+const findAllPhotosInAlbum = async (albumId) => {
+    return await Photos.find({ albumId });
 };
 
 const getAllPhotoInAlbum = async (albumId) => {
@@ -60,7 +64,8 @@ module.exports = {
     findPhoto,
     updatePhoto,
     deletePhoto,
-    deleteAllPhotoInAlbum,
+    deleteAllPhotosInAlbum,
+    findAllPhotosInAlbum,
     getAllPhotoInAlbum,
     getAllPhotoInUser,
 };

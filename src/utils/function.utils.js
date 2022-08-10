@@ -21,7 +21,6 @@ const sendOTPtoMail = async (email) => {
         subject: 'Verify Your Account',
         html: `<p>Enter <b>${otp}</b> to verify your email address</p>`,
     });
-    console.log();
     return otp;
 };
 

@@ -5,13 +5,16 @@ const { Error } = require('../../commons/errorHandling');
 const activateUser = async (email, otp) => {
     try {
         const user = await userRepo.findUserByEmail(email);
+        if (user.isActive === true) {
+            throw new Error(400, 'This user is active');
+        }
         const otpCode = user.activeCode;
         if (otp === otpCode) {
             user.isActive = true;
             await user.save();
             return true;
         } else {
-            throw new Error('400', 'activate user fail');
+            return false;
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -27,30 +30,30 @@ const resendToken = async (email) => {
         const user = await userRepo.findUserByEmail(email);
         user.activeCode = await functionUtils.sendOTPtoMail(email);
         await user.save();
-        return user.activeCode;
     } catch (err) {
         if (error instanceof Error) {
             throw error;
         } else {
-            throw new Error(500, 'resend token fail');
+            throw new Error(500, 'Resend OTP fail');
         }
     }
 };
 
 const createNewUser = async (userRegister) => {
     try {
-        if (!(await userRepo.checkUserExists(userRegister.username, userRegister.email))) {
+        const check = await userRepo.checkUserExists(userRegister.username, userRegister.email);
+        if (!check) {
             const user = await userRepo.createNewUser(userRegister);
             user.activeCode = await functionUtils.sendOTPtoMail(user.email);
-            return await user.save();
+            await user.save();
         } else {
-            throw new Error('500', 'user exists');
+            throw new Error(400, 'user exists');
         }
     } catch (error) {
         if (error instanceof Error) {
             throw error;
         } else {
-            throw new Error(500, 'Create new user fail');
+            throw new Error(500, 'Internal server error');
         }
     }
 };
@@ -61,15 +64,15 @@ const forgotPassword = async (email, activeCode, password) => {
         if (user.activeCode === activeCode) {
             user.password = functionUtils.hashPassword(password);
             await user.save();
-            return 'change forgot-password success';
+            return true;
         } else {
-            throw new Error('400', ' activeCode is wrong ');
+            return false;
         }
     } catch (error) {
         if (error instanceof Error) {
             throw error;
         } else {
-            throw new Error(500, 'change forgot-password fail');
+            throw new Error(500, 'Internal server error');
         }
     }
 };
@@ -79,15 +82,16 @@ const changePassword = async (email, password, newPassword) => {
         const user = await userRepo.findUserByEmail(email);
         if (user.password === functionUtils.hashPassword(password)) {
             user.password = functionUtils.hashPassword(newPassword);
-            return await user.save();
+            await user.save();
+            return true;
         } else {
-            throw new Error('400', 'wrong password');
+            return false;
         }
     } catch (error) {
         if (error instanceof Error) {
             throw error;
         } else {
-            throw new Error(500, 'change password fail');
+            throw new Error(500, 'Internal server error');
         }
     }
 };
@@ -95,14 +99,9 @@ const changePassword = async (email, password, newPassword) => {
 const updateUserInfo = async (userUpdate) => {
     try {
         const user = await userRepo.findUserByEmail(userUpdate.email);
-        if (user) {
-            user.dob = userUpdate.dob ? userUpdate.dob : user.dob;
-            user.fullname = userUpdate.fullname ? userUpdate.fullname : user.fullname;
-            await user.save();
-            return user;
-        } else {
-            throw new Error('400', 'update is not success');
-        }
+        user.dob = userUpdate.dob ? userUpdate.dob : user.dob;
+        user.fullname = userUpdate.fullname ? userUpdate.fullname : user.fullname;
+        await user.save();
     } catch (error) {
         if (error instanceof Error) {
             throw error;

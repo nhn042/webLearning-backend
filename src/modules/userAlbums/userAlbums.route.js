@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userAlbumsController = require('./userAlbums.controller');
 const { checkLogin } = require('../../utils/middleware.utils');
+const { validateAddUserAlbum, validateInputAccount } = require('../userAlbums/userAlbums.validation');
 
 /**
  * @swagger
@@ -138,9 +139,9 @@ const { checkLogin } = require('../../utils/middleware.utils');
  *                description: Get user fail
  */
 
-router.post('/user-album', checkLogin, userAlbumsController.addUserAlbum);
+router.post('/user-album', validateAddUserAlbum, checkLogin, userAlbumsController.addUserAlbum);
 router.get('/user-album/:id', checkLogin, userAlbumsController.getMemberInAlbum);
-router.delete('/user-album/:id', checkLogin, userAlbumsController.deleteUserAlbum);
-router.put('/user-album/:id', checkLogin, userAlbumsController.grantPermission);
+router.delete('/user-album/:id', validateInputAccount, checkLogin, userAlbumsController.deleteUserAlbum);
+router.put('/user-album/:id', validateInputAccount, checkLogin, userAlbumsController.grantPermission);
 
 module.exports = router;

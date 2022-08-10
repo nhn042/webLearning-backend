@@ -1,11 +1,13 @@
 const userAlbumService = require('./userAlbums.service');
+const { Error } = require('../../commons/errorHandling');
 
 const addUserAlbum = async (req, res, next) => {
     try {
         await userAlbumService.addUserAlbum(req.body);
         res.status(200).send('add user into album success');
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        console.log(err);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -20,7 +22,7 @@ const getMemberInAlbum = async (req, res, next) => {
             res.status(400).send('This album do not have any member');
         }
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -31,7 +33,7 @@ const deleteUserAlbum = async (req, res, next) => {
         await userAlbumService.deleteUserAlbum(req.body);
         res.status(200).send('delete user into album success');
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -42,7 +44,7 @@ const grantPermission = async (req, res, next) => {
         await userAlbumService.grantPermission(req.body);
         res.status(200).send('grant user permission into album success ');
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };

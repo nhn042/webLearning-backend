@@ -6,7 +6,8 @@ const albumRepo = require('../albums/album.repository');
 const getMemberInAlbum = async (userId, albumId) => {
     try {
         const albumname = (await albumRepo.findAlbumById(albumId)).albumname;
-        if (userAlbumRepo.hasPermission(userId, albumname)) {
+        const hasPermission = await userAlbumRepo.hasPermission(userId, albumname);
+        if (hasPermission) {
             return await userAlbumRepo.getMemberAlbum(albumId);
         } else throw new Error(403, 'You do not have permission');
     } catch (error) {
@@ -29,16 +30,18 @@ const createNewUserAlbum = async (userId, albumId, role) => {
 const addUserAlbum = async (info) => {
     try {
         const ownerId = info.userId;
-        if (await userAlbumRepo.isOwnerAlbum(ownerId, info.albumname)) {
+        const checkOwner = await userAlbumRepo.isOwnerAlbum(ownerId, info.albumname);
+        if (checkOwner) {
             const guestId = (await userRepo.findUserByAccount(info.account)).id;
             if (!guestId) {
-                throw new Error('400', 'Can not find this member');
+                throw new Error(400, 'Can not find this member');
             }
             if (await userAlbumRepo.checkAlbumExist(guestId, info.albumname)) {
-                throw new Error('400', 'Member is added to this album or album is not exist');
+                throw new Error(400, 'Member is added to this album or album is not exist');
             }
             const albumId = (await albumRepo.findAlbumByName(info.albumname)).id;
             await userAlbumRepo.createUserAlbum(guestId, albumId, 0);
+            return true;
         } else throw new Error(403, "You aren't owner");
     } catch (error) {
         if (error instanceof Error) {
@@ -53,7 +56,8 @@ const deleteUserAlbum = async (info) => {
     try {
         const ownerId = info.userId;
         const albumname = (await albumRepo.findAlbumById(info.albumId)).albumname;
-        if (await userAlbumRepo.isOwnerAlbum(ownerId, albumname)) {
+        const checkOwner = await userAlbumRepo.isOwnerAlbum(ownerId, albumname);
+        if (checkOwner) {
             const memberId = (await userRepo.findUserByAccount(info.account)).id;
             if (!memberId) {
                 throw new Error(400, 'This account is not exist');
@@ -76,7 +80,8 @@ const grantPermission = async (info) => {
     try {
         const ownerId = info.userId;
         const albumname = (await albumRepo.findAlbumById(info.albumId)).albumname;
-        if (await userAlbumRepo.isOwnerAlbum(ownerId, albumname)) {
+        const checkOwner = await userAlbumRepo.isOwnerAlbum(ownerId, albumname);
+        if (checkOwner) {
             const memberId = (await userRepo.findUserByAccount(info.account)).id;
             if (!memberId) {
                 throw new Error(400, 'This account is not exist');

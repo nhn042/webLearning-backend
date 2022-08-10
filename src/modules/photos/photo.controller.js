@@ -19,7 +19,7 @@ const addPhotos = async (req, res, next) => {
             res.status(500).send('All images are exist in album');
         }
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -31,10 +31,10 @@ const getAllPhotoInAlbum = async (req, res, next) => {
         if (photoList.length > 0) {
             res.status(200).send(photoList);
         } else {
-            res.status(500).send('This album do not have any photo');
+            res.status(400).send('This album do not have any photo');
         }
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -45,10 +45,10 @@ const getAllPhotoInUser = async (req, res, next) => {
         if (photoList.length > 0) {
             res.status(200).send(photoList);
         } else {
-            res.status(500).send('This user do not have any photo');
+            res.status(400).send('This user do not have any photo');
         }
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -59,7 +59,7 @@ const deletePhoto = async (req, res, next) => {
         await photoService.deletePhoto(req.body);
         res.status(200).send('delete photo success');
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -67,14 +67,10 @@ const deletePhoto = async (req, res, next) => {
 const updatePhoto = async (req, res, next) => {
     try {
         req.body.photoId = req.params.id;
-        const updateCheck = await photoService.updatePhoto(req.body);
-        if (updateCheck) {
-            res.status(200).send('update photo success');
-        } else {
-            res.status(500).send('update photo fail');
-        }
+        await photoService.updatePhoto(req.body);
+        res.status(200).send('update photo success');
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };

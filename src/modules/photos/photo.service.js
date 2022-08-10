@@ -31,7 +31,7 @@ const addPhotosInUser = async (photoInfos, input) => {
         photoInfos.forEach((item) => {
             fs.unlinkSync(item.path);
         });
-        throw new Error('500', 'Can not add photo in user');
+        throw new Error(500, 'Can not add photo in user');
     }
 };
 
@@ -48,22 +48,8 @@ const addPhotosInAlbum = async (photoInfos, input) => {
                     size: item.size,
                 };
             });
-
-            // const photoInfo = photoFixInfos.filter((item) => {
-            //     photoRepo.checkPhotoExistsInAlbum(item.albumId, item.photoName).then((data) => {
-            //         if (data) {
-            //             return false;
-            //         } else return true;
-            //     });
-            //     // if (check) {
-            //     //     fs.unlinkSync(item.path);
-            //     //     console.log(item.photoName + ' is exist in album');
-            //     // }
-            //     // console.log(check);
-            //     // return !check;
-            // });
             const filterPhotos = [];
-            for await (let item of photoFixInfos) {
+            for (let item of photoFixInfos) {
                 const check = await photoRepo.checkPhotoExistsInAlbum(item.albumId, item.photoName);
                 if (check) {
                     fs.unlinkSync(item.path);
@@ -73,14 +59,15 @@ const addPhotosInAlbum = async (photoInfos, input) => {
                 }
             }
             if (filterPhotos.length === 0) return false;
-            return await photoRepo.addPhotos(filterPhotos);
+            return photoRepo.addPhotos(filterPhotos);
         } else {
             photoInfos.forEach((item) => {
                 fs.unlinkSync(item.path);
             });
-            throw new Error('403', 'You do not have permission to upload photo in this album');
+            throw new Error(403, 'You do not have permission to upload photo in this album');
         }
     } catch (error) {
+        console.log(error);
         if (error instanceof Error) {
             throw error;
         } else {
@@ -91,9 +78,9 @@ const addPhotosInAlbum = async (photoInfos, input) => {
 
 const addPhotos = async (photoInfos, input) => {
     if (input.albumname) {
-        return await addPhotosInAlbum(photoInfos, input);
+        return addPhotosInAlbum(photoInfos, input);
     } else {
-        return await addPhotosInUser(photoInfos, input);
+        return addPhotosInUser(photoInfos, input);
     }
 };
 
@@ -111,7 +98,7 @@ const deletePhoto = async (photoInfo) => {
                 await photoRepo.deletePhoto(photo.id);
                 fs.unlinkSync(photoPath);
             } catch (error) {
-                throw new Error('400', 'can not find this path in vscode to delete');
+                throw new Error(400, 'can not find this path in vscode to delete');
             }
             return true;
         } else {
@@ -120,6 +107,19 @@ const deletePhoto = async (photoInfo) => {
     } catch (err) {
         if (err instanceof Error) throw err;
         throw new Error(500, 'Delete photo fail');
+    }
+};
+
+const deleteAllPhotosInAlbum = async (albumId) => {
+    try {
+        const photoList = await photoRepo.findAllPhotosInAlbum(albumId);
+        for (const item of photoList) {
+            fs.unlinkSync(item.path);
+        }
+        return photoRepo.deleteAllPhotosInAlbum(albumId);
+    } catch (err) {
+        if (err instanceof Error) throw err;
+        throw new Error(400, 'Delete all photo in album fail');
     }
 };
 
@@ -140,7 +140,6 @@ const updatePhoto = async (photoInfo) => {
                 } catch (err) {
                     throw err;
                 }
-                return true;
             } else {
                 throw new Error(400, 'The update name is same as the old name');
             }
@@ -155,7 +154,11 @@ const updatePhoto = async (photoInfo) => {
 
 const getAllPhotoInAlbum = async (userId, albumId) => {
     try {
-        return await photoRepo.getAllPhotoInAlbum(albumId);
+        if (await userAlbumRepo.hasPermission(userId, (await albumRepo.findAlbumById(albumId)).albumname)) {
+            return await photoRepo.getAllPhotoInAlbum(albumId);
+        } else {
+            throw new Error(403, 'You do not have permission');
+        }
     } catch (err) {
         if (err instanceof Error) throw err;
         throw new Error(500, 'get all photo in album fail');
@@ -171,4 +174,4 @@ const getAllPhotoInUser = async (userId) => {
     }
 };
 
-module.exports = { addPhotos, deletePhoto, updatePhoto, getAllPhotoInAlbum, getAllPhotoInUser };
+module.exports = { addPhotos, deletePhoto, updatePhoto, getAllPhotoInAlbum, getAllPhotoInUser, deleteAllPhotosInAlbum };

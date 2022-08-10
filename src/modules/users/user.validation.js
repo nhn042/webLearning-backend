@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { Error } = require('../../commons/errorHandling');
 const validateActivateUser = async (req, res, next) => {
     const schema = Joi.object({
         email: Joi.string()
@@ -12,21 +13,22 @@ const validateActivateUser = async (req, res, next) => {
         await schema.validateAsync({ email, otp });
         next();
     } catch (e) {
-        next(new Error('400', e.details[0].message));
+        next(new Error(400, e.details[0].message));
     }
 };
 
 const validateResendToken = async (req, res, next) => {
     const schema = Joi.object({
         email: Joi.string()
+            .trim()
             .email({ minDomainSegments: 2, tlds: { allow: ['com', 'vn'] } })
             .required(),
     });
     try {
-        await schema.validateAsync(req.body.email);
+        await schema.validateAsync({ email: req.body.email });
         next();
     } catch (e) {
-        next(new Error('400', e.details[0].message));
+        next(new Error(400, e.details[0].message));
     }
 };
 
@@ -44,7 +46,7 @@ const validateForgotPassword = async (req, res, next) => {
         await schema.validateAsync({ email, activeCode, password });
         next();
     } catch (e) {
-        next(new Error('400', e.details[0].message));
+        next(new Error(400, e.details[0].message));
     }
 };
 
@@ -58,7 +60,7 @@ const validateChangePassword = async (req, res, next) => {
         await schema.validateAsync({ password, newPassword });
         next();
     } catch (e) {
-        next(new Error('400', e.details[0].message));
+        next(new Error(400, e.details[0].message));
     }
 };
 
@@ -72,7 +74,7 @@ const validateUpdateUser = async (req, res, next) => {
         await schema.validateAsync({ dob, fullname });
         next();
     } catch (e) {
-        next(new Error('400', e.details[0].message));
+        next(new Error(400, e.details[0].message));
     }
 };
 

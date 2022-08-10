@@ -5,58 +5,57 @@ const { Error } = require('../../commons/errorHandling');
 const activateUser = async (req, res, next) => {
     const { email, otp } = req.body;
     try {
-        if (await userService.activateUser(email, otp)) {
+        const checkActivate = await userService.activateUser(email, otp);
+        if (checkActivate) {
             res.status(200).json({
                 email: email,
                 otp: otp,
                 message: 'Email is active',
             });
         } else {
-            res.status(400).send('fail activate email');
+            res.status(400).send('Wrong OTP');
         }
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
 
 const resendToken = async (req, res, next) => {
     try {
-        if (await userService.resendToken(req.body.email)) {
-            res.status(200).json('Resend OTP success');
-        } else {
-            res.status(400).send('Resend OTP fail');
-        }
+        await userService.resendToken(req.body.email);
+        res.status(200).send('Resend OTP success');
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
 const forgotPassword = async (req, res, next) => {
     const { email, activeCode, password } = req.body;
     try {
-        if (await userService.forgotPassword(email, activeCode, password)) {
-            res.status(200).json('change forgot-password success');
+        const checkForgotPass = await userService.forgotPassword(email, activeCode, password);
+        if (checkForgotPass) {
+            res.status(200).send('change forgot-password success');
         } else {
-            res.status(400).send('change forgot-password fail');
+            res.status(400).send('Wrong OTP');
         }
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
 
 const changePassword = async (req, res, next) => {
     const { email, password, newPassword } = req.body;
-    console.log(req.body);
     try {
-        if (await userService.changePassword(email, password, newPassword)) {
-            res.status(200).json('change pass success');
+        const checkChangePass = await userService.changePassword(email, password, newPassword);
+        if (checkChangePass) {
+            res.status(200).send('change pass success');
         } else {
-            res.status(400).send('change pass fail');
+            res.status(400).send('Your password is wrong');
         }
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };
@@ -64,13 +63,10 @@ const changePassword = async (req, res, next) => {
 const updateUserInfo = async (req, res, next) => {
     const userUpdate = req.body;
     try {
-        if (await userService.updateUserInfo(userUpdate)) {
-            res.status(200).json('update success');
-        } else {
-            res.status(400).send('update fail');
-        }
+        await userService.updateUserInfo(userUpdate);
+        res.status(200).send('update success');
     } catch (err) {
-        res.status(err.errorCode).json(err.errorMessage);
+        res.status(err.errorCode).send(err.errorMessage);
         next(err);
     }
 };

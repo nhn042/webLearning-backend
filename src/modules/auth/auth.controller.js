@@ -17,15 +17,12 @@ const register = async (req, res, next) => {
     const userRegister = req.body;
     userRegister.password = functitonUtils.hashPassword(userRegister.password);
     try {
-        if (await authService.register(userRegister)) {
-            res.status(200).json({
-                message: 'Used Saved',
-                username: userRegister.username,
-                password: userRegister.password,
-            });
-        } else {
-            res.status(401).json({ message: 'Register Failed' });
-        }
+        await authService.register(userRegister);
+        res.status(200).json({
+            message: 'Used Saved',
+            username: userRegister.username,
+            password: userRegister.password,
+        });
     } catch (err) {
         res.status(err.errorCode).json(err.errorMessage);
         next(err);

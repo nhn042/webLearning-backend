@@ -50,9 +50,8 @@ app.use((err, req, res, next) => {
     }
 });
 
-mongoose.connection.once('open', () => {
-    console.log('Connect to MongoDB');
-    app.listen(process.env.PORT, () => {
-        console.log(`connect to ${process.env.PORT}`);
-    });
+const server = app.listen(process.env.PORT, () => {
+    console.log(`connect to ${process.env.PORT}`);
 });
+
+module.exports = { app: server };
