@@ -34,12 +34,13 @@ const findUserByAccount = async (account) => {
 };
 
 const createNewUser = async (userRegister) => {
+    console.log('userRegister', userRegister);
     return await User.create({
         username: userRegister.username,
         password: userRegister.password,
         email: userRegister.email,
-        fullname: userRegister.fullname,
-        dob: userRegister.dob,
+        // fullname: userRegister.fullname,
+        // dob: userRegister.dob,
     });
 };
 

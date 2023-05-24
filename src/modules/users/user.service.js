@@ -41,14 +41,16 @@ const resendToken = async (email) => {
 
 const createNewUser = async (userRegister) => {
     try {
-        const check = await userRepo.checkUserExists(userRegister.username, userRegister.email);
-        if (!check) {
-            const user = await userRepo.createNewUser(userRegister);
-            user.activeCode = await functionUtils.sendOTPtoMail(user.email);
-            await user.save();
-        } else {
-            throw new Error(400, 'user exists');
-        }
+        // const check = await userRepo.checkUserExists(userRegister.username, userRegister.email);
+        // if (!check) {
+            console.log('user');
+        const user = await userRepo.createNewUser(userRegister);
+        console.log('user', user);
+        // user.activeCode = await functionUtils.sendOTPtoMail(user.email);
+        await user.save();
+        // } else {
+        //     throw new Error(400, 'user exists');
+        // }
     } catch (error) {
         if (error instanceof Error) {
             throw error;

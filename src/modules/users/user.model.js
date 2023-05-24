@@ -16,36 +16,36 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    fullname: {
-        type: String,
-        required: true,
-    },
-    dob: {
-        type: Date,
-        required: true,
-    },
-    createdAt: {
-        type: Date,
-        timestamps: true,
-        imutable: true,
-        default: () => Date.now(),
-        required: true,
-    },
-    updatedAt: {
-        type: Date,
-        timestamps: true,
-        default: () => Date.now(),
-        required: true,
-    },
+    // fullname: {
+    //     type: String,
+    //     required: true,
+    // },
+    // dob: {
+    //     type: Date,
+    //     required: true,
+    // },
+    // createdAt: {
+    //     type: Date,
+    //     timestamps: true,
+    //     imutable: true,
+    //     default: () => Date.now(),
+    //     required: true,
+    // },
+    // updatedAt: {
+    //     type: Date,
+    //     timestamps: true,
+    //     default: () => Date.now(),
+    //     required: true,
+    // },
     isActive: {
         type: Boolean,
         default: false,
         required: true,
     },
-    activeCode: {
-        type: Number,
-        default: null,
-    },
+    // activeCode: {
+    //     type: Number,
+    //     default: null,
+    // },
 });
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('check', userSchema);
