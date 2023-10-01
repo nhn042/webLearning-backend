@@ -3,40 +3,60 @@ const jwt = require('jsonwebtoken');
 const userService = require('../users/user.service');
 const utils = require('../../utils/function.utils');
 const { Error } = require('../../commons/errorHandling');
-
+const serect_key = 'WEBAPI'
 const checkLogin = async (accountName, password) => {
     try {
-        const user = await userRepo.login(accountName, utils.hashPassword(password));
+        // console.log('utils.hashPassword(password)', utils.hashPassword(password));
+        const user = await userRepo.login(accountName, password);
+        console.log('user', user);
         if (!user) {
-            throw new Error(400, 'Can not find this user');
-        }
-        if (user.isActive) {
-            return jwt.sign(
+            return res.status(400).send({
+                success: false,
+                message: 'User not found',
+            });
+        } else {
+            const token = jwt.sign(
                 {
                     userId: user._id.toString(),
                     username: user.username,
                     email: user.email,
-                    fullname: user.fullname,
                 },
-                process.env.ACCESS_TOKEN_SECRET,
+                serect_key,
                 {
                     expiresIn: '1d',
                 }
             );
-        } else {
-            throw new Error(400, 'this user is not active');
+            return {
+                success: true,
+                token: token,
+                message: 'User found',
+            };
         }
     } catch (err) {
-        if (err instanceof Error) throw err;
-        throw new Error(500, 'Internal server error');
+        throw err;
     }
 };
 
 const register = async (userRegister) => {
     try {
-        await userService.createNewUser(userRegister);
+        return await userService.createNewUser(userRegister);
+        // console.log(responses);
+        // if (response.success === true) {
+        //     return res.status(200).send({
+        //         success: true,
+        //         message: 'dang ky thanh cong',
+        //     });
+        // } else {
+        //     return response.status(400).send({
+        //         success: false,
+        //         message: 'dang ky that bai',
+        //     });
+        // }
     } catch (err) {
-        throw err;
+        return {
+            success: false,
+            message: 'dang ky that bai',
+        };
     }
 };
 

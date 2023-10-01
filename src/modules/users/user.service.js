@@ -1,4 +1,5 @@
 const userRepo = require('./user.repository');
+const jwt = require("jsonwebtoken")
 const functionUtils = require('../../utils/function.utils');
 const { Error } = require('../../commons/errorHandling');
 
@@ -41,22 +42,33 @@ const resendToken = async (email) => {
 
 const createNewUser = async (userRegister) => {
     try {
-        // const check = await userRepo.checkUserExists(userRegister.username, userRegister.email);
-        // if (!check) {
-            console.log('user');
-        const user = await userRepo.createNewUser(userRegister);
-        console.log('user', user);
-        // user.activeCode = await functionUtils.sendOTPtoMail(user.email);
-        await user.save();
-        // } else {
-        //     throw new Error(400, 'user exists');
-        // }
-    } catch (error) {
-        if (error instanceof Error) {
-            throw error;
-        } else {
-            throw new Error(500, 'Internal server error');
+        const user = await userRepo.findUserByEmail(userRegister.email);
+        if(user) {
+            return {
+                success: false,
+                message: 'tài khoản đã tồn tại',
+            };
         }
+        const check = await userRepo.checkUserExists(userRegister.name, userRegister.email);
+        
+        if (!check) {
+            const user = await userRepo.createNewUser(userRegister);
+            return {
+                success: true,
+                message: 'đăng ký thành công',
+            };
+        } else {
+            return {
+                success: false,
+                message: 'email không hợp lệ',
+            };
+        }
+    } catch (error) {
+        console.log('error', error);
+        return {
+            success: false,
+            message: 'đăng ký thất bại',
+        };
     }
 };
 
@@ -100,8 +112,12 @@ const changePassword = async (email, password, newPassword) => {
 
 const updateUserInfo = async (userUpdate) => {
     try {
+        console.log('userUpdate', userUpdate);
         const user = await userRepo.findUserByEmail(userUpdate.email);
         user.dob = userUpdate.dob ? userUpdate.dob : user.dob;
+        user.number = userUpdate.number ? userUpdate.number : user.number;
+        user.address = userUpdate.address ? userUpdate.address : user.address;
+        user.gender = userUpdate.gender ? userUpdate.gender : user.gender;
         user.fullname = userUpdate.fullname ? userUpdate.fullname : user.fullname;
         await user.save();
     } catch (error) {

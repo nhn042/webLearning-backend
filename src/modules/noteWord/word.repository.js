@@ -38,8 +38,6 @@ const createNewUser = async (userRegister) => {
         fullname: userRegister.name,
         dob: userRegister.date,
         number: userRegister.number,
-        gender: userRegister.gender,
-        address: userRegister.address,
     });
     return await user.save();
 };
