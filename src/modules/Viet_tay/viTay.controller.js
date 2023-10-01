@@ -4,7 +4,19 @@ const { Error } = require('../../commons/errorHandling');
 
 const getAll = async (req, res) => {
     try {
-        return await viTayService.getAll();
+        const allWord = await viTayService.getAll();
+        if (allWord.length === 0) {
+            return res.status(400).send({
+                data: 'không lấy được data',
+                success: false,
+                message: 'Lấy data thất bại',
+            });
+        }
+        return res.status(200).send({
+            data: allWord,
+            success: true,
+            message: 'Lấy data thành công',
+        });
     } catch (err) {
         throw err;
     }
@@ -36,7 +48,7 @@ const translateTayToViet = async (req, res) => {
 const translateVietToTay = async (req, res) => {
     const query = req.query;
     console.log(33333);
-    console.log(query.query)
+    console.log(query.query);
     console.log(1111);
     try {
         return await viTayService.translate(query.query, 'viet');

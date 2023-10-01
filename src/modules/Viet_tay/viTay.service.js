@@ -2,8 +2,17 @@ const viTayRepo = require('./viTay.repository');
 
 const getAll = async () => {
     const allWord = await viTayRepo.getAllVietTay();
-    return allWord;
-}
+    console.log('allWord', allWord);
+    const dataAllWord = allWord.map((value) => {
+        return {
+            viet: value.idVi.word,
+            tay: value.idTay.word,
+            dacdiem: value.idTay.description,
+        };
+    });
+    console.log('dataAllWord', dataAllWord);
+    return dataAllWord;
+};
 
 const translate = async (word, language) => {
     const words = await viTayRepo.translate(word, language);
@@ -15,7 +24,7 @@ const translate = async (word, language) => {
         return words.map((value) => value.idVi.word);
     }
     return words.map((value) => value.idTay.word);
-}
+};
 module.exports = {
     translate,
     getAll,
