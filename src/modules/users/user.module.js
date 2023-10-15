@@ -41,6 +41,10 @@ const userSchema = new Schema({
         timestamps: true,
         default: () => Date.now(),
     },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+      },
     // isActive: {
     //     type: Boolean,
     //     default: false,

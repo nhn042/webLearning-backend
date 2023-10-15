@@ -1,15 +1,14 @@
 const jwt = require("jsonwebtoken")
-const secret_key = "WEBAPI";
 
-const auth = (req, res, next) => {
-    console.log(req);
+const verifyToken = (req, res, next) => {
     try{
         let token = req.headers.authorization
-        console.log(req.headers.authorization);
         if(token) {
             token = token.split(" ")[1];
-            let user = jwt.verify(token, secret_key)
+            let user = jwt.verify(token, process.env.JWT_ACCESS_KEY)
+            console.log('user', user);
             req.userId = user.id
+            console.log(1111111);
         } else {
             res.status(401).json({message: "Unauthorized User"});
         }
@@ -19,4 +18,6 @@ const auth = (req, res, next) => {
         res.status(401).json({message: "Unauthorized User"})
     }
 }
-module.exports = auth;
+module.exports = {
+    verifyToken,
+};

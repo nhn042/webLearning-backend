@@ -3,6 +3,24 @@ const userService = require('./user.service');
 const userRepo = require('./user.repository');
 const { Error } = require('../../commons/errorHandling');
 
+const getAllUser = async (req, res) => {
+    try {
+        const dataUser = await userRepo.findAllUser();
+        console.log('dataUser', dataUser);
+        if (dataUser) {
+            res.status(200).json({
+                data: dataUser,
+                message: 'get all user success',
+            });
+        } else {
+            res.status(400).send('Wrong OTP');
+        }
+    } catch (err) {
+        res.status(err.errorCode).send(err.errorMessage);
+        next(err);
+    }
+};
+
 const activateUser = async (req, res) => {
     res.status(200).json('Wrong OTP');
     // const { email, otp } = req.body;
@@ -47,11 +65,13 @@ const forgotPassword = async (req, res, next) => {
     }
 };
 
-const changePassword = async (req, res, next) => {
-    const { email, password, newPassword } = req.body;
+const changePassword = async (req, res) => {
+    const { id, password } = req.body;
     try {
-        const checkChangePass = await userService.changePassword(email, password, newPassword);
-        if (checkChangePass) {
+        const user = await userRepo.findUserById(id);
+        if (password) {
+            user.password = password;
+            await user.save();
             res.status(200).send('change pass success');
         } else {
             res.status(400).send('Your password is wrong');
@@ -64,8 +84,9 @@ const changePassword = async (req, res, next) => {
 
 const updateUserInfo = async (req, res, next) => {
     const userUpdate = req.body;
+    console.log('userUpdate', userUpdate);
     const user = await userRepo.findUserByEmail(userUpdate.email);
-    if(user) {
+    if (!user) {
         return res.status(404).send({
             success: false,
             message: 'dang ky that bai',
@@ -80,7 +101,29 @@ const updateUserInfo = async (req, res, next) => {
     }
 };
 
+const getDetailsUser = async (req, res) => {
+    try {
+        console.log('req.params', req.params);
+        const userId = req.params.id
+        console.log('userId', userId);
+        if (!userId) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The userId is required'
+            })
+        }
+        const response = await userService.getDetailsUser(userId)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 module.exports = {
+    getDetailsUser,
+    getAllUser,
     activateUser,
     resendToken,
     forgotPassword,

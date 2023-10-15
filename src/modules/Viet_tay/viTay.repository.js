@@ -2,7 +2,6 @@ const viTayModel = require('./viTay.module');
 
 const translate = async (wordSearch, language) => {
     try {
-        console.log(wordSearch)
         if (language === 'viet') {
             const tayWords = await viTayModel
                 .find()
@@ -20,6 +19,7 @@ const translate = async (wordSearch, language) => {
             });
             return word;
         }
+        wordSearch = `${wordSearch} `;
         const vietWords = await viTayModel
             .find()
             .lean()
@@ -38,10 +38,10 @@ const translate = async (wordSearch, language) => {
     } catch (err) {
         throw err;
     }
-}
+};
 
 const getAllVietTay = async () => {
-    return await viTayModel 
+    return await viTayModel
         .find()
         .lean()
         .populate({
@@ -51,7 +51,7 @@ const getAllVietTay = async () => {
             path: 'idTay',
         })
         .exec();
-}
+};
 
 const getTaytoViet = async (wordSearch) => {
     const vietWords = await viTayModel
@@ -65,7 +65,7 @@ const getTaytoViet = async (wordSearch) => {
     return vietWords.filter((vietWord) => {
         return vietWord.idTay;
     });
-}
+};
 
 module.exports = {
     translate,

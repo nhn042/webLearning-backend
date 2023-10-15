@@ -24,10 +24,8 @@ const getAll = async (req, res) => {
 
 const translateTayToViet = async (req, res) => {
     const query = req.query;
-    console.log(query);
     try {
         const word = await viTayService.translate(query.query, 'tay');
-        console.log('word', word);
         if (word === query.query) {
             return res.status(400).send({
                 data: 'không lấy được data',
@@ -68,8 +66,32 @@ const translateVietToTay = async (req, res) => {
     }
 };
 
+const translateSequenceTextVietToTay = async (req, res) => {
+    const query = req.query;
+    console.log(query.query);
+    try {
+        const word = await viTayService.translate(query.query, 'viet');
+        console.log('word', word);
+        if (word === query.query) {
+            return res.status(400).send({
+                data: 'không lấy được data',
+                success: false,
+                message: 'Lấy data thất bại',
+            });
+        }
+        return res.status(200).send({
+            data: word,
+            success: true,
+            message: 'Lấy data thành công',
+        });
+    } catch (err) {
+        throw err;
+    }
+};
+
 module.exports = {
     getAll,
     translateTayToViet,
     translateVietToTay,
+    translateSequenceTextVietToTay,
 };

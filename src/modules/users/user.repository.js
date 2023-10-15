@@ -26,6 +26,13 @@ const findUserByEmail = async (email) => {
     return await User.findOne({ email: email });
 };
 
+const findUserById = async (id) => {
+    return await User.findOne({ _id: id });
+};
+
+const findAllUser = async () => {
+    return await User.find();
+}
 const findUserByAccount = async (account) => {
     return (await User.findOne({ email: account })) || (await User.findOne({ username: account }));
 };
@@ -46,8 +53,10 @@ const createNewUser = async (userRegister) => {
 
 module.exports = {
     login,
+    findAllUser,
     findUserByEmail,
     findUserByAccount,
     createNewUser,
     checkUserExists,
+    findUserById,
 };

@@ -2,6 +2,7 @@ const userRepo = require('./user.repository');
 const jwt = require("jsonwebtoken")
 const functionUtils = require('../../utils/function.utils');
 const { Error } = require('../../commons/errorHandling');
+const User = require('./user.module');
 
 const activateUser = async (email, otp) => {
     try {
@@ -50,8 +51,8 @@ const createNewUser = async (userRegister) => {
             };
         }
         const check = await userRepo.checkUserExists(userRegister.name, userRegister.email);
-        
-        if (!check) {
+        console.log('check', check);
+        if (check) {
             const user = await userRepo.createNewUser(userRegister);
             return {
                 success: true,
@@ -129,7 +130,32 @@ const updateUserInfo = async (userUpdate) => {
     }
 };
 
+const getDetailsUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await User.findOne({
+                _id: id
+            })
+            if (user === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The user is not defined'
+                })
+            }
+            resolve({
+                status: 'OK',
+                message: 'SUCESS',
+                data: user
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+
 module.exports = {
+    getDetailsUser,
     activateUser,
     createNewUser,
     resendToken,
