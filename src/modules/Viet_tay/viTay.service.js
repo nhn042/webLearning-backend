@@ -22,7 +22,83 @@ const translate = async (word, language) => {
     }
     return words.map((value) => value.idTay.word);
 };
+
+const translateSequenceTextVietnamToTay = async (text) => {
+    const arrWord = text.split(' ');
+    const test = [];
+
+    for (const value of arrWord) {
+        console.log(1111);
+        const result = await viTayRepo.getViettoTay(value);
+        console.log('result', result);
+        test.push(result);
+    }
+
+    let result = [];
+    backTrackingAlgorithm(test, arrWord.length, 0, 0, [], result);
+    console.log('result111', result);
+    return {
+        listSequenceText: result,
+    };
+};
+
+const translateVietToTay = async (text) => {
+    const arrWord = text.split(' ');
+    let test = '';
+    let result = [];
+
+    for (let i = 0; i < arrWord.length; i++) {
+        while (i < arrWord.length) {
+            test = (await viTayRepo.getVietToTay(test))[0];
+        }
+    }
+
+    backTrackingAlgorithm(test, arrWord.length, 0, 0, [], result);
+
+    return {
+        listSequenceText: result,
+    };
+};
+
+const translateSequenceTextTayToVietnam = async (text) => {
+    const arrWord = text.split(' ');
+    const test = [];
+
+    for (const value of arrWord) {
+        const result = await viTayRepo.getTaytoViet(value);
+        test.push(result);
+    }
+
+    let result = [];
+    backTrackingAlgorithm(test, arrWord.length, 0, 0, [], result);
+
+    return {
+        listSequenceText: result,
+    };
+};
+
+const getVietToTay = (word) => {
+    return viTayRepo.getViettoTay(word);
+};
+const getTayToViet = (word) => {
+    return viTayRepo.getTaytoViet(word);
+};
+
+const backTrackingAlgorithm = (arr, l, indexArrWord, j, x, result) => {
+    for (const value of arr[j]) {
+        x[indexArrWord] = value.idTay.word;
+        if (indexArrWord === l - 1) {
+            result.push(x.join(' '));
+        } else {
+            backTrackingAlgorithm(arr, l, indexArrWord + 1, j + 1, x, result);
+        }
+    }
+};
+
 module.exports = {
     translate,
     getAll,
+    getVietToTay,
+    getTayToViet,
+    translateSequenceTextVietnamToTay,
 };

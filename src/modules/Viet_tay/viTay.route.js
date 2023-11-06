@@ -5,6 +5,8 @@ const middlewareUtils = require('../../utils/middleware.utils');
 const auth = require('../../middleware/author');
 
 router.get('/find/getAll', viTayController.getAll);
+// router.get('/find/viet', viTayController.translateVietToTay);
+// router.get('/find/tay', viTayController.translateTayToViet);
 router.get('/find/viet', viTayController.translateVietToTay);
 router.get('/find/tay', viTayController.translateTayToViet);
 

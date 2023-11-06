@@ -54,16 +54,34 @@ const getAllVietTay = async () => {
 };
 
 const getTaytoViet = async (wordSearch) => {
+    wordSearch = `${wordSearch} `;
     const vietWords = await viTayModel
         .find({})
         .populate({
             path: 'idTay',
             match: { word: wordSearch },
+            select: 'word',
         })
-        .populate('idVi')
+        .populate('idVi', 'word')
         .exec();
-    return vietWords.filter((vietWord) => {
-        return vietWord.idTay;
+    return vietWords.filter((vitay) => {
+        return vitay.idTay;
+    });
+};
+
+const getViettoTay = async (wordSearch) => {
+    console.log('wordSearch', wordSearch);
+    const tayWords = await viTayModel
+        .find({})
+        .populate({
+            path: 'idVi',
+            match: { word: wordSearch },
+            select: 'word',
+        })
+        .populate('idTay', 'word')
+        .exec();
+    return tayWords.filter((vitay) => {
+        return vitay.idVi;
     });
 };
 
@@ -71,4 +89,5 @@ module.exports = {
     translate,
     getAllVietTay,
     getTaytoViet,
+    getViettoTay,
 };
