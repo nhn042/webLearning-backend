@@ -1,7 +1,8 @@
 const wordSchema = require('./word.module');
 const { Error } = require('../../commons/errorHandling');
 const getWord = async (req, res) => {
-    const allWord = await wordSchema.find();
+    const {query: email} = req.query
+    const allWord = await wordSchema.find({emailUser: email});
     return res.status(200).send({
         success: true,
         data: allWord,
@@ -23,6 +24,7 @@ const updateWord = async (req, res) => {
         tay: wordUpdate.tay,
         dokho: wordUpdate.dokho,
         dacdiem: wordUpdate.dacdiem,
+        emailUser: wordUpdate.emailUser,
     });
     await WordSchema.save();
     

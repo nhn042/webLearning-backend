@@ -18,6 +18,10 @@ const wordSchema = new Schema({
         type: String,
         required: true,
     },
+    emailUser: {
+        type: String,
+        required: true,
+    },
 });
 
 module.exports = mongoose.model('wordSchema', wordSchema);

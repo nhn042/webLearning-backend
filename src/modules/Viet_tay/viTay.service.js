@@ -28,15 +28,11 @@ const translateSequenceTextVietnamToTay = async (text) => {
     const test = [];
 
     for (const value of arrWord) {
-        console.log(1111);
         const result = await viTayRepo.getViettoTay(value);
-        console.log('result', result);
         test.push(result);
     }
-
     let result = [];
     backTrackingAlgorithm(test, arrWord.length, 0, 0, [], result);
-    console.log('result111', result);
     return {
         listSequenceText: result,
     };
@@ -68,9 +64,8 @@ const translateSequenceTextTayToVietnam = async (text) => {
         const result = await viTayRepo.getTaytoViet(value);
         test.push(result);
     }
-
     let result = [];
-    backTrackingAlgorithm(test, arrWord.length, 0, 0, [], result);
+    backTrackingAlgorithmTaytoViet(test, arrWord.length, 0, 0, [], result);
 
     return {
         listSequenceText: result,
@@ -82,6 +77,17 @@ const getVietToTay = (word) => {
 };
 const getTayToViet = (word) => {
     return viTayRepo.getTaytoViet(word);
+};
+
+const backTrackingAlgorithmTaytoViet = (arr, l, indexArrWord, j, x, result) => {
+    for (const value of arr[j]) {
+        x[indexArrWord] = value.idVi.word;
+        if (indexArrWord === l - 1) {
+            result.push(x.join(' '));
+        } else {
+            backTrackingAlgorithm(arr, l, indexArrWord + 1, j + 1, x, result);
+        }
+    }
 };
 
 const backTrackingAlgorithm = (arr, l, indexArrWord, j, x, result) => {
@@ -101,4 +107,5 @@ module.exports = {
     getVietToTay,
     getTayToViet,
     translateSequenceTextVietnamToTay,
+    translateSequenceTextTayToVietnam,
 };

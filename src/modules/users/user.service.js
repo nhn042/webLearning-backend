@@ -1,5 +1,5 @@
 const userRepo = require('./user.repository');
-const jwt = require("jsonwebtoken")
+const jwt = require('jsonwebtoken');
 const functionUtils = require('../../utils/function.utils');
 const { Error } = require('../../commons/errorHandling');
 const User = require('./user.module');
@@ -44,14 +44,13 @@ const resendToken = async (email) => {
 const createNewUser = async (userRegister) => {
     try {
         const user = await userRepo.findUserByEmail(userRegister.email);
-        if(user) {
+        if (user) {
             return {
                 success: false,
                 message: 'tài khoản đã tồn tại',
             };
         }
         const check = await userRepo.checkUserExists(userRegister.name, userRegister.email);
-        console.log('check', check);
         if (check) {
             const user = await userRepo.createNewUser(userRegister);
             return {
@@ -134,25 +133,24 @@ const getDetailsUser = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const user = await User.findOne({
-                _id: id
-            })
+                _id: id,
+            });
             if (user === null) {
                 resolve({
                     status: 'ERR',
-                    message: 'The user is not defined'
-                })
+                    message: 'The user is not defined',
+                });
             }
             resolve({
                 status: 'OK',
                 message: 'SUCESS',
-                data: user
-            })
+                data: user,
+            });
         } catch (e) {
-            reject(e)
+            reject(e);
         }
-    })
-}
-
+    });
+};
 
 module.exports = {
     getDetailsUser,

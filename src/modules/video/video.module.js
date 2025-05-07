@@ -2,19 +2,19 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const videoSchema = new Schema({
-    viet: {
+    avatar: {
         type: String,
         required: true,
     },
-    tay: {
+    name: {
         type: String,
         required: true,
     },
-    dokho: {
+    link: {
         type: String,
         required: true,
     },
-    dacdiem: {
+    type: {
         type: String,
         required: true,
     },

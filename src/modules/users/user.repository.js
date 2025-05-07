@@ -13,7 +13,6 @@ const checkUserExists = async (username, email) => {
 };
 
 const login = async (accountName, password) => {
-    console.log(accountName, password);
     return (
         (await User.findOne({
             email: accountName,
@@ -38,7 +37,6 @@ const findUserByAccount = async (account) => {
 };
 
 const createNewUser = async (userRegister) => {
-    console.log('userRegister', userRegister);
     const user = new User({
         email: userRegister.email,
         password: userRegister.password,

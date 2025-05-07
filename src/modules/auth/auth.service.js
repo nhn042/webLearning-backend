@@ -39,19 +39,8 @@ const checkLogin = async (accountName, password) => {
 
 const register = async (userRegister) => {
     try {
+        console.log(123);
         return await userService.createNewUser(userRegister);
-        // console.log(responses);
-        // if (response.success === true) {
-        //     return res.status(200).send({
-        //         success: true,
-        //         message: 'dang ky thanh cong',
-        //     });
-        // } else {
-        //     return response.status(400).send({
-        //         success: false,
-        //         message: 'dang ky that bai',
-        //     });
-        // }
     } catch (err) {
         return {
             success: false,

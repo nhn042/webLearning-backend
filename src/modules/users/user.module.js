@@ -44,7 +44,11 @@ const userSchema = new Schema({
     isAdmin: {
         type: Boolean,
         default: false,
-      },
+    },
+    activeCode: {
+        type: String,
+        default: null,
+    },
     // isActive: {
     //     type: Boolean,
     //     default: false,

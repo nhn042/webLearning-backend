@@ -19,13 +19,13 @@ const translate = async (wordSearch, language) => {
             });
             return word;
         }
-        wordSearch = `${wordSearch} `;
+        // wordSearch = `${wordSearch} `;
         const vietWords = await viTayModel
             .find()
             .lean()
             .populate({
                 path: 'idTay',
-                match: { word: wordSearch },
+                match: { word: wordSearch || `${wordSearch} ` },
             })
             .populate({
                 path: 'idVi',
@@ -54,8 +54,16 @@ const getAllVietTay = async () => {
 };
 
 const getTaytoViet = async (wordSearch) => {
-    wordSearch = `${wordSearch} `;
     const vietWords = await viTayModel
+        .find({})
+        .populate({
+            path: 'idTay',
+            match: { word: `${wordSearch} ` },
+            select: 'word',
+        })
+        .populate('idVi', 'word')
+        .exec();
+    const vietWordsSpace = await viTayModel
         .find({})
         .populate({
             path: 'idTay',
@@ -64,13 +72,18 @@ const getTaytoViet = async (wordSearch) => {
         })
         .populate('idVi', 'word')
         .exec();
-    return vietWords.filter((vitay) => {
+    let result = vietWords.filter((vitay) => {
         return vitay.idTay;
     });
+    if (result.length === 0) {
+        result = vietWordsSpace.filter((vitay) => {
+            return vitay.idTay;
+        });
+    }
+    return result;
 };
 
 const getViettoTay = async (wordSearch) => {
-    console.log('wordSearch', wordSearch);
     const tayWords = await viTayModel
         .find({})
         .populate({
