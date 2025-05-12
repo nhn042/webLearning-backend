@@ -6,9 +6,7 @@ const { Error } = require('../../commons/errorHandling');
 const serect_key = 'WEBAPI'
 const checkLogin = async (accountName, password) => {
     try {
-        // console.log('utils.hashPassword(password)', utils.hashPassword(password));
         const user = await userRepo.login(accountName, password);
-        console.log('user', user);
         if (!user) {
             return res.status(400).send({
                 success: false,
@@ -39,7 +37,6 @@ const checkLogin = async (accountName, password) => {
 
 const register = async (userRegister) => {
     try {
-        console.log(123);
         return await userService.createNewUser(userRegister);
     } catch (err) {
         return {

@@ -26,7 +26,6 @@ app.use(viTayRoute);
 app.use((err, req, res, next) => {
     if (err instanceof Error) res.status(err.errorCode).send(err.errorMessage);
     else {
-        console.log(err);
         res.sendStatus(500);
     }
 });

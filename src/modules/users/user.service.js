@@ -64,7 +64,6 @@ const createNewUser = async (userRegister) => {
             };
         }
     } catch (error) {
-        console.log('error', error);
         return {
             success: false,
             message: 'đăng ký thất bại',
@@ -112,7 +111,6 @@ const changePassword = async (email, password, newPassword) => {
 
 const updateUserInfo = async (userUpdate) => {
     try {
-        console.log('userUpdate', userUpdate);
         const user = await userRepo.findUserByEmail(userUpdate.email);
         user.dob = userUpdate.dob ? userUpdate.dob : user.dob;
         user.number = userUpdate.number ? userUpdate.number : user.number;

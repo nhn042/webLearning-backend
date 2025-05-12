@@ -8,7 +8,6 @@ const User = require('./user.module');
 const getAllUser = async (req, res) => {
     try {
         const dataUser = await userRepo.findAllUser();
-        console.log('dataUser', dataUser);
         if (dataUser) {
             res.status(200).json({
                 data: dataUser,
@@ -54,9 +53,18 @@ const resendToken = async (req, res, next) => {
 };
 const forgotPassword = async (req, res) => {
     const { query: email } = req.query;
-    if (!email) throw new Error('Missing email');
+    if (!email) {
+        return res.status(404).json({
+            message: 'Missing email',
+        });
+    }
     const user = await userRepo.findUserByEmail(email);
-    if (!user) throw new Error('User not found');
+
+    if (!user) {
+        return res.status(404).json({
+            message: 'User not found',
+        });
+    }
     const activeCode = Math.floor(Math.random() * 900000) + 100000;
     user.activeCode = activeCode;
     await user.save();
@@ -81,7 +89,6 @@ const forgotPassword = async (req, res) => {
 
 const changePassword = async (req, res) => {
     const { id, email, code, password } = req.body;
-    console.log('id, email', id, email);
     try {
         if (email) {
             const user = await userRepo.findUserByEmail(email);
@@ -112,7 +119,6 @@ const changePassword = async (req, res) => {
             }
         }
     } catch (err) {
-        console.log('err', err);
         return res.status(404).json({
             message: e,
         });
@@ -139,9 +145,7 @@ const updateUserInfo = async (req, res, next) => {
 
 const getDetailsUser = async (req, res) => {
     try {
-        console.log('req.params', req.params);
         const userId = req.params.id;
-        console.log('userId', userId);
         if (!userId) {
             return res.status(200).json({
                 status: 'ERR',

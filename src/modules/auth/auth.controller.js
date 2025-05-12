@@ -28,14 +28,12 @@ const generateRefreshToken = async (user) => {
 
 const login = async (req, res, next) => {
     const { username, password } = req.body;
-    console.log('username, password', username, password);
     try {
         const user = await userRepo.findUserByEmail(username);
         const response = await authService.checkLogin(username, password);
         if (response.success === true) {
             //Generate access token
             const accessToken = await generateAccessToken(user);
-            console.log('accessToken', accessToken);
             //Generate refresh token
             const refreshToken = await generateRefreshToken(user);
             refreshTokens.push(refreshToken);
@@ -76,9 +74,6 @@ const requestRefreshToken = async (req, res) => {
         return res.status(403).json('Refresh token is not valid');
     }
     jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
-        if (err) {
-            console.log(err);
-        }
         refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
         //create new access token, refresh token and send to user
         const newAccessToken = authController.generateAccessToken(user);

@@ -49,7 +49,6 @@ const getAll = async (req, res) => {
 
 const translateSequenceTextVietToTay = async (req, res) => {
     const query = req.query;
-    console.log(query.query);
     try {
         const word = await viTayService.translate(query.query, 'viet');
         if (word === query.query) {
@@ -107,7 +106,6 @@ const translateTayToViet = async (req, res) => {
         });
     }
     const result = await viTayService.translateSequenceTextTayToVietnam(query);
-    console.log('result', result);
     return res.status(200).send({
         data: result.listSequenceText,
         success: true,

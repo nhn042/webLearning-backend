@@ -3,7 +3,6 @@ class errorHandling extends Error {
         super();
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
-        console.log(this);
     }
 }
 
